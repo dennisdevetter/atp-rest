@@ -1,4 +1,4 @@
-import userModel from '../models/user';
+import userService from '../business/services/userService';
 import jwt from 'jsonwebtoken';
 import ApiRoute from './ApiRoute';
 
@@ -9,26 +9,29 @@ export function index(req, res) {
 
 export function authenticate(app, req, res) {  
 
-	var username = req.body.username;
-	var password = req.body.password;
+	var username = req.body.username; 
+  var password = req.body.password;
+  
+  userService.getUserByName(username).resolve().then((result)=> {
 
-  // find the user
-  userModel.findOne({ name: username }, function(err, user) {
-    if (err) {
-    	throw err;
-    }
-
+    // the user is in array???????
+    let user = result[1];
+    
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
       return;
     } 
+    
+    console.log('the user password = ' + user.password);
 
+    console.log('the body password = ' + password);
     // check if password matches
     if (user.password != password) {
       res.json({ success: false, message: 'Authentication failed. Wrong password.' });
       return;
     } 
 
+    console.log("appp");
     // if user is found and password is right
     // create a token
     var token = jwt.sign(user, app.get('superSecret'), {
@@ -41,7 +44,10 @@ export function authenticate(app, req, res) {
       message: 'Enjoy your token!',
       token: token
     });
-  });
+  }).catch((error) => {
+    console.log(error);
+    throw error;
+  }); 
 }
 
 var apiRoutes = [

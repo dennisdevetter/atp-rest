@@ -4,10 +4,9 @@
   "description": "REST api using MongoDB and NodeJS",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon ./src/server.js", // nodemon must be installed globally. it watches file changes and automatically restarts the server.
+    "start": "nodemon ./src/server.js",
     "test": "gulp",
     "lint": "gulp lint",
-    "test-browser": "gulp test-browser",
     "watch": "gulp watch",
     "build": "gulp build",
     "coverage": "gulp coverage"
@@ -28,7 +27,8 @@
     "body-parser": "~1.14.2",
     "express": "~4.13.4",
     "jsonwebtoken": "~5.5.4",
-    "mongoose": "~4.3.7"
+    "mongoose": "~4.3.7",
+    "bluebird": "~3.1.4"
   },
   "devDependencies": {
     "babel-core": "^6.3.26",

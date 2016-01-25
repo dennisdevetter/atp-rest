@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import userModel from '../models/user';
+import userModel from '../database/models/user';
 import ApiRoute from './ApiRoute';
 
 export function createNewUser(req, res) {

@@ -3,13 +3,11 @@ import loadPlugins from 'gulp-load-plugins';
 import del  from 'del';
 import glob  from 'glob';
 import path  from 'path';
-import {Instrumenter} from 'isparta';
-import webpack from 'webpack';
-import webpackStream from 'webpack-stream';
 import source  from 'vinyl-source-stream';
-
+import babel from 'gulp-babel';
 import mochaGlobals from './test/setup/.globals';
 import manifest  from './package.json';
+import { Instrumenter } from 'isparta';
 
 // Load all of our Gulp plugins
 const $ = loadPlugins();
@@ -20,8 +18,18 @@ const mainFile = manifest.main;
 const destinationFolder = path.dirname(mainFile);
 const exportFileName = path.basename(mainFile, path.extname(mainFile));
 
+var firstBuild = true;
+
 function cleanDist(done) {
   del([destinationFolder]).then(() => done());
+}
+
+function cleanTmp(done) {
+  del(['tmp']).then(() => done());
+}
+
+function cleanCoverage(done){
+ del(['coverage']).then(() => done()); 
 }
 
 function cleanTmp(done) {
@@ -38,9 +46,7 @@ function lint(files) {
     .pipe($.plumber())
     .pipe($.eslint())
     .pipe($.eslint.format())
-    .pipe($.eslint.failOnError())
-    //.pipe($.jscs())    // TODO
-    //.pipe($.jscs.reporter('fail'))
+    .pipe($.eslint.failOnError())    
     .on('error', onError);
 }
 
@@ -57,80 +63,41 @@ function lintGulpfile() {
 }
 
 function build() {
-  return gulp.src(path.join('src', config.entryFileName + '.js'))
-    .pipe($.plumber())
-    .pipe(webpackStream({
-      output: {
-        filename: exportFileName + '.js',
-        libraryTarget: 'umd',
-        library: config.mainVarName
-      },     
-      node: {
-        fs: 'empty',
-        net: 'empty',
-        tls : 'empty'
-      }, 
-      resolve: {
-        extensions: ['', '.js', '.jsx', '.node']
-      },
-      module: {
-        loaders: [
-          { 
-            test: /\.js$/, 
-            exclude: 'node_modules', 
-            loader: 'babel-loader' 
-          },
-          { 
-            test: /\.json$/,             
-            loader: 'json-loader'
-          },
-          { 
-            test: [/\.md$/],            
-            loader: 'file-loader'            
-          },
-          {
-            test: /\.node$/,
-            loader: 'node-loader'
-          }
-        ]
-      },
-      devtool: 'source-map'
-    }))
-    .pipe(gulp.dest(destinationFolder))
-    .pipe($.filter(['*', '!**/*.js.map']))
-    .pipe($.rename(exportFileName + '.min.js'))
-    .pipe($.sourcemaps.init({ loadMaps: true }))
-    //.pipe($.uglify())
-    .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest(destinationFolder));
+  return gulp.src('src/**/*.js')
+    .pipe($.plumber())    
+    .pipe(babel())    
+    .pipe(gulp.dest(destinationFolder));   
 }
 
 function _mocha() {
   return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
+    .pipe(babel())
     .pipe($.mocha({
-      reporter: 'dot',
+      reporter: 'spec',
       globals: Object.keys(mochaGlobals.globals),
       ignoreLeaks: false
     }));
 }
 
-function _registerBabel() {
-  require('babel-register');
-}
-
 function test() {
-  _registerBabel();
   return _mocha();
 }
 
-function coverage(done) {
-  _registerBabel();
+function coverage(done) {  
   gulp.src(['src/**/*.js'])
-    .pipe($.istanbul({ instrumenter: Instrumenter }))
-    .pipe($.istanbul.hookRequire())
+    .pipe(babel())
+    .pipe($.istanbul({ 
+      instrumenter: Instrumenter,
+      includeUntested: true }))
+    .pipe($.istanbul.hookRequire())    
     .on('finish', () => {
       return test()
-        .pipe($.istanbul.writeReports())
+        .pipe($.istanbul.writeReports({
+           dir: './coverage',
+           reporters: [ 'lcov' ],
+           reportOpts: { dir: './coverage'}
+        }))
+        .pipe($.istanbul.enforceThresholds({ thresholds: { global: 90 } }))
         .on('end', done);
     });
 }
@@ -142,50 +109,14 @@ function watch() {
   gulp.watch(watchFiles, ['test']);
 }
 
-function testBrowser() {
-  // Our testing bundle is made up of our unit tests, which
-  // should individually load up pieces of our application.
-  // We also include the browser setup file.
-  const testFiles = glob.sync('./test/unit/**/*.js');
-  const allFiles = ['./test/setup/browser.js'].concat(testFiles);
-
-  // Lets us differentiate between the first build and subsequent builds
-  var firstBuild = true;
-
-  // This empty stream might seem like a hack, but we need to specify all of our files through
-  // the `entry` option of webpack. Otherwise, it ignores whatever file(s) are placed in here.
-  return gulp.src('')
-    .pipe($.plumber())
-    .pipe(webpackStream({
-      watch: true,
-      entry: allFiles,
-      output: {
-        filename: '__spec-build.js'
-      },
-      module: {
-        loaders: [
-          // This is what allows us to author in future JavaScript
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
-          // This allows the test setup scripts to load `package.json`
-          { test: /\.json$/, exclude: /node_modules/, loader: 'json-loader' }
-        ]
-      },
-      plugins: [
-        // By default, webpack does `n=>n` compilation with entry files. This concatenates
-        // them into a single chunk.
-        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
-      ],
-      devtool: 'inline-source-map'
-    }, null, function() {
-      if (firstBuild) {
-        $.livereload.listen({port: 35729, host: 'localhost', start: true});
-        var watcher = gulp.watch(watchFiles, ['lint']);
-      } else {
-        $.livereload.reload('./tmp/__spec-build.js');
-      }
-      firstBuild = false;
-    }))
-    .pipe(gulp.dest('./tmp'));
+function liveReload(){  
+  if (firstBuild) {
+    $.livereload.listen({port: 35729, host: 'localhost', start: true});
+    var watcher = gulp.watch(watchFiles, ['lint']);
+  } else {
+    $.livereload.reload('./tmp/__spec-build.js');
+  }
+  firstBuild = false;
 }
 
 // Remove the built files
@@ -193,6 +124,9 @@ gulp.task('clean', cleanDist);
 
 // Remove our temporary files
 gulp.task('clean-tmp', cleanTmp);
+
+// Remove coverage folder
+gulp.task('clean-coverage', cleanCoverage);
 
 // Lint our source code
 gulp.task('lint-src', lintSrc);
@@ -213,10 +147,7 @@ gulp.task('build', ['lint', 'clean'], build);
 gulp.task('test', ['lint'], test);
 
 // Set up coverage and run tests
-gulp.task('coverage', ['lint'], coverage);
-
-// Set up a livereload environment for our spec runner `test/runner.html`
-gulp.task('test-browser', ['lint', 'clean-tmp'], testBrowser);
+gulp.task('coverage', ['lint', 'clean-coverage'], coverage);
 
 // Run the headless unit tests as you make changes.
 gulp.task('watch', watch);

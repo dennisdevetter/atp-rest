@@ -1,10 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import mongoose from 'mongoose';
 import config from './config'; // get our config file
-import { getAllRoutes, addRoutesToRouter, authenticate as authenticateRouteHandler, createRoute } from './routes';
+import { getAllRoutes, addRoutesToRouter , createRoute } from './routes';
+import { authenticate } from './routes/api';
 import { applyMiddleware } from './middleware';
+import { connectToDatabase } from './database';
 
 // initialize the express server
 var app = express();
@@ -13,7 +14,10 @@ var app = express();
 // configuration =========
 // =======================
 var port = process.env.PORT || 8080; // used to create, sign, and verify tokens
-mongoose.connect(config.database); // connect to database
+
+// set up mongoose database
+connectToDatabase(config.database);
+
 app.set('superSecret', config.secret); // secret variable
 
 // use body parser so we can get info from POST and/or URL parameters
@@ -40,7 +44,7 @@ applyMiddleware(apiRouter, app);
 
 // initialize the routes ontothe router
 var routes = getAllRoutes();
-routes.push(createRoute('/authenticate', (req, res) => authenticateRouteHandler(app, req, res), 'POST', true ));
+routes.push(createRoute('/authenticate', (req, res) => authenticate(app, req, res), 'POST', true ));
 addRoutesToRouter(routes, apiRouter);
 
 // apply the routes to our application with the prefix /api
