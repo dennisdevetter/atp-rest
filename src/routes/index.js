@@ -2,71 +2,43 @@ import apiRoutes from './api';
 import userRoutes from './users';
 import playerRoutes from './players';
 
-const getAllRoutes = () => {
-	var routeMap = {};
+var allRoutes = [].concat(apiRoutes, userRoutes, playerRoutes);
 
-	function addRoutes(routes) {
-		for(let key in routes ){		
-			if (!routeMap[key]) {
-				routeMap[key]=routes[key];
-			}
-			else{
-				throw Error(`duplicate route found with key ${key}`);
-			}		
-		}
+export const getAllRoutes = () => {
+	return allRoutes;
+}
+
+export const addRoutesToRouter = (routes = [], router)  => {
+	if (!router){
+		throw Error('router cannot be null');
 	}
 
-	addRoutes(userRoutes);
-	addRoutes(playerRoutes);
-	addRoutes(apiRoutes);
-
-	return routeMap;
-}
-
-const addRoutesToRouter = (routes, router)  => {
-
-	Object.keys(routes).map((endpoint) => {
-		let route = routes[endpoint], routeKeys = Object.keys(route);
-		if (routeKeys.length >= 1 && routeKeys[0])
-		{	
-			let method = routeKeys[0];					
-			let routeHandler = route[method];		
-			if (method && typeof routeHandler === 'function')		{									
-					method = method.toLowerCase().trim();
-					let routerMethod = router[method];
-					if (routerMethod) {
-						router[method](endpoint, routeHandler);
-						console.log(`added route '${method} ${endpoint}'`);		
-					}				
-			}
-		} 
-	});
-}
-
-export const createRoutes = (router) => {
-	addRoutesToRouter(routes, router);			
+	for(let index in routes){		
+		let { method, endpoint, handler } = routes[index];				
+		
+		let methodLowerCased = method.toLowerCase().trim();
+		if (router[methodLowerCased]) {			
+			router[methodLowerCased](endpoint, handler);
+			console.log(`added route '${method} ${endpoint}'`);		
+		}				
+	}
 }
 
 export const isSecureRoute = (endpoint) => {
 	if (!endpoint) 	{
 			throw Error('endpoint cannot be null');
 	}
-	
-	let uri = endpoint.trim().toLowerCase();
-	let route = routes[uri];
-	
-	if (!route || route.isPublic)	{
-		console.log('route is not secure');
-		return false;
-	}
+		
+	let routes = allRoutes.filter((r) => { 		
+		return r.endpoint.trim().toLowerCase() === endpoint.trim().toLowerCase();
+	});
 
-	return true;
+	return (routes.length == 1 && routes[0].isPublic === false);
 }
 
-var routes = getAllRoutes() || {};
-
 export default {
-	createRoutes,	
-	isSecureRoute
+	addRoutesToRouter,	
+	isSecureRoute,
+	getAllRoutes
 };
 

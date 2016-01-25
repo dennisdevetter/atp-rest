@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import config from './config'; // get our config file
-import { createRoutes } from './routes';
+import { getAllRoutes, addRoutesToRouter } from './routes';
 import { applyMiddleware } from './middleware';
 
 // initialize the express server
@@ -33,16 +33,17 @@ let allowedMethods = ['GET','POST', 'PUT', 'DELETE'];
 // API ROUTES -------------------
 
 // get an instance of the router for api routes
-var apiRoutes = express.Router(); 
+var apiRouter = express.Router(); 
 
 // apply middleware for the routes
-applyMiddleware(apiRoutes, app);
+applyMiddleware(apiRouter, app);
 
 // initialize the routes ontothe router
-createRoutes(apiRoutes);
+var routes = getAllRoutes();
+addRoutesToRouter(routes, apiRouter);
 
 // apply the routes to our application with the prefix /api
-app.use('/api', apiRoutes);
+app.use('/api', apiRouter);
 
 // =======================
 // start the server ======

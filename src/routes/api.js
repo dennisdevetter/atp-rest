@@ -1,13 +1,14 @@
 import userModel from '../models/user';
 import config from '../config'; 
 import jwt from 'jsonwebtoken';
+import ApiRoute from './ApiRoute';
 
 // route to show a random message (GET http://localhost:8080/api/)
-function index(req, res) {
+export function index(req, res) {
 	res.json({ message: 'Welcome to the coolest API on earth!' });
 }
 
-function authenticate(req, res) {  
+export function authenticate(req, res) {  
 
 	var username = req.body.username;
 	var password = req.body.password;
@@ -44,7 +45,11 @@ function authenticate(req, res) {
   });
 }
 
-export default {
-	'/'						  : { 'GET' : index, isPublic: true },
-	'/authenticate' : { 'POST' : authenticate, isPublic: true }	
-}
+let isPublicRoute = true;
+
+var apiRoutes = [
+  new ApiRoute('/', index, 'GET', isPublicRoute),
+  new ApiRoute('/authenticate', authenticate, 'POST', isPublicRoute)  
+]
+
+export default apiRoutes;

@@ -1,7 +1,11 @@
-function createNewPlayer(req, res) {
+import ApiRoute from './ApiRoute';
+
+export function createNewPlayer(req, res) {
 	
 }
 
-export default {
-	'/player/create' : { 'POST' : createNewPlayer }
-}
+var playerRoutes = [
+  new ApiRoute('/player/create', createNewPlayer)
+]
+
+export default playerRoutes;

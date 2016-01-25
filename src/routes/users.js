@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import userModel from '../models/user';
+import ApiRoute from './ApiRoute';
 
-function createNewUser(req, res) {
+export function createNewUser(req, res) {
 	// create a sample user
   var nick = new userModel({ 
     name: 'Nick Cerminara', 
@@ -18,13 +19,16 @@ function createNewUser(req, res) {
   });
 }
 
-function getAllUsers(req, res) {
+export function getAllUsers(req, res) {
    userModel.find({}, function(err, users) {
     res.json(users);
   });
 }
 
-export default {
-	'/setup' : { 'GET' : createNewUser },  
-  '/users' : { 'GET' : getAllUsers }
-}
+var userRoutes = [
+  new ApiRoute('/setup', createNewUser),
+  new ApiRoute('/users', getAllUsers)
+]
+
+export default userRoutes;
+
