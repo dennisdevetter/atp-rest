@@ -1,11 +1,16 @@
 import apiRoutes from './api';
 import userRoutes from './users';
 import playerRoutes from './players';
+import ApiRoute from './ApiRoute';
 
 var allRoutes = [].concat(apiRoutes, userRoutes, playerRoutes);
 
 export const getAllRoutes = () => {
 	return allRoutes;
+}
+
+export const createRoute = (endpoint, handler, method, isPublic) => {
+	return new ApiRoute(endpoint, handler, method, isPublic);
 }
 
 export const addRoutesToRouter = (routes = [], router)  => {
@@ -14,12 +19,10 @@ export const addRoutesToRouter = (routes = [], router)  => {
 	}
 
 	for(let index in routes){		
-		let { method, endpoint, handler } = routes[index];				
-		
+		let { method, endpoint, handler } = routes[index];						
 		let methodLowerCased = method.toLowerCase().trim();
 		if (router[methodLowerCased]) {			
-			router[methodLowerCased](endpoint, handler);
-			console.log(`added route '${method} ${endpoint}'`);		
+			router[methodLowerCased](endpoint, handler);			
 		}				
 	}
 }

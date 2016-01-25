@@ -3,9 +3,8 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import config from './config'; // get our config file
-import { getAllRoutes, addRoutesToRouter, authenticate as authenticateRouteHandler } from './routes';
+import { getAllRoutes, addRoutesToRouter, authenticate as authenticateRouteHandler, createRoute } from './routes';
 import { applyMiddleware } from './middleware';
-import ApiRoute from './routes/ApiRoute';
 
 // initialize the express server
 var app = express();
@@ -41,7 +40,7 @@ applyMiddleware(apiRouter, app);
 
 // initialize the routes ontothe router
 var routes = getAllRoutes();
-routes.push(new ApiRoute('/authenticate', (req, res) => authenticateRouteHandler(app, req, res), 'POST', true ));
+routes.push(createRoute('/authenticate', (req, res) => authenticateRouteHandler(app, req, res), 'POST', true ));
 addRoutesToRouter(routes, apiRouter);
 
 // apply the routes to our application with the prefix /api
