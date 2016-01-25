@@ -15,6 +15,7 @@ export function authenticate(app, req, res) {
   userService.getUserByName(username).resolve().then((result)=> {
 
     // the user is in array???????
+    // because nested promises?
     let user = result[1];
     
     if (!user) {
