@@ -1,5 +1,4 @@
 import userModel from '../models/user';
-import config from '../config'; 
 import jwt from 'jsonwebtoken';
 import ApiRoute from './ApiRoute';
 
@@ -8,7 +7,7 @@ export function index(req, res) {
 	res.json({ message: 'Welcome to the coolest API on earth!' });
 }
 
-export function authenticate(req, res) {  
+export function authenticate(app, req, res) {  
 
 	var username = req.body.username;
 	var password = req.body.password;
@@ -32,7 +31,7 @@ export function authenticate(req, res) {
 
     // if user is found and password is right
     // create a token
-    var token = jwt.sign(user, config.secret, {
+    var token = jwt.sign(user, app.get('superSecret'), {
       expiresInMinutes: 1440 // expires in 24 hours
     });
 
@@ -45,11 +44,8 @@ export function authenticate(req, res) {
   });
 }
 
-let isPublicRoute = true;
-
 var apiRoutes = [
-  new ApiRoute('/', index, 'GET', isPublicRoute),
-  new ApiRoute('/authenticate', authenticate, 'POST', isPublicRoute)  
+  new ApiRoute('/', index, 'GET', true)  
 ]
 
 export default apiRoutes;
