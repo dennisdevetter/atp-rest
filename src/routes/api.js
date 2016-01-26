@@ -3,12 +3,15 @@ import jwt from 'jsonwebtoken';
 import ApiRoute from './ApiRoute';
 
 // the token expire timout is set to 24 hours.
-let tokenExpireTimeOut = 1440;
+var tokenExpireTimeOut = '1d';
 
 export function createToken(value, secret, expirationTime) {
-  var token = jwt.sign(value, secret, {
-        expiresInMinutes: tokenExpireTimeOut 
-  });
+
+  var options = {
+    expiresIn : tokenExpireTimeOut
+  };
+
+  var token = jwt.sign({payload: value}, secret, options);
   return token;
 }
 
@@ -36,7 +39,7 @@ export function authenticate(app, req, res) {
     let token = createToken(`${username}+${password}`, app.get('superSecret'));
     res.json({
       success: true,
-      message: 'Enjoy your token!',
+      message: `Enjoy your token! it will be available for ${tokenExpireTimeOut}`,
       token: token
     });
   })).catch((error) => {
