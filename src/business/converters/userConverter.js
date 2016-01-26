@@ -8,8 +8,6 @@ function convertFrom(model){
 		isAdmin : model.admin,
 		email : model.email
 	});
-	
-	console.log(entity.password);
 
 	return entity;
 }

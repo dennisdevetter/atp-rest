@@ -3,8 +3,7 @@ import { isSecureRoute } from './routes';
 
 function decodeToken(app, req, res, next) {  
   if (!isSecureRoute(req.url))
-  {
-    console.log('public route. skip decoding token');
+  {    
     next();
     return;
   }
@@ -19,7 +18,7 @@ function decodeToken(app, req, res, next) {
         message: 'No token provided.' 
     });    
   }
-
+  
   // verifies secret and checks exp
   jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
     if (err) {

@@ -13,15 +13,12 @@ export function authenticate(app, req, res) {
   var password = req.body.password;
   
   userService.getUserByName(username).then((user)=> {
-        
+
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
       return;
     } 
-    
-    console.log('the user password = ' + user.password);
-
-    console.log('the body password = ' + password);
+        
     // check if password matches
     if (user.password != password) {
       res.json({ success: false, message: 'Authentication failed. Wrong password.' });
