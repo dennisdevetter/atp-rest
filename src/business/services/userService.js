@@ -8,19 +8,18 @@ export default class UserService extends ServiceBase {
 	}
 
 	getUsers() {
-		return this.callApi(UserModel.find({}));
+		let query = UserModel.find({});
+		return this.request(query);
 	}
 	
 	getUserByName(name) {			
-		return this.callApi(UserModel.findOne({
-			name: name
-		}));			
+		let query = UserModel.findOne({ name: name });
+		return this.request(query);			
 	}
 
 	getUserById(id) {			
-		return this.callApi(UserModel.findOne({
-			id: id
-		}));			
+		let query = UserModel.findOne({ _id: id	});			
+		return this.request(query);
 	}
 
 	addUser(user) {
@@ -33,8 +32,7 @@ export default class UserService extends ServiceBase {
 	    admin: admin 
 	  });
 
-		return userModel.save((user) => {
-			 console.log('User saved successfully');
+		return userModel.save((response) => {		 
 		   return user;
 		});		
 	}

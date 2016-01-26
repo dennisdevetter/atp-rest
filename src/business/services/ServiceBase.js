@@ -26,7 +26,7 @@ class ServiceBase {
 		return this._convertItem(response);
 	}
 
-	callApi(promise, onFetched) {
+	request(promise, onFetched) {
 		return runAsync(promise, (response) => this.__handleResponse(response));
 	}
 }
