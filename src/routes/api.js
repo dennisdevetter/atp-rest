@@ -12,12 +12,8 @@ export function authenticate(app, req, res) {
 	var username = req.body.username; 
   var password = req.body.password;
   
-  userService.getUserByName(username).resolve().then((result)=> {
-
-    // the user is in array???????
-    // because nested promises?
-    let user = result[1];
-    
+  userService.getUserByName(username).then((user)=> {
+        
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
       return;
