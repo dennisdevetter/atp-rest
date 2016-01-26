@@ -42,6 +42,6 @@ export const isSecureRoute = (endpoint) => {
 export default {
 	addRoutesToRouter,	
 	isSecureRoute,
-	getAllRoutes
+	getAllRoutes	
 };
 

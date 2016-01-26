@@ -25,7 +25,28 @@ export function getUserByName(name) {
 	return runAsync(promise, convert);
 }
 
+export function authenticate(username, password) {
+	return getUserByName(username).then((user)=> {    
+     if (!user) {
+		    return { 
+		      authenticated: false,
+		      message: 'Authentication failed. User not found.' 
+		    };      
+		  } 		        		 
+		  if (user.password != password) {
+		    return {
+		     authenticated: false, 
+		     message: 'Authentication failed. Wrong password.'
+		    };
+		  }		  
+		  return {
+		    authenticated: true		    		   
+		  };  
+  });
+}
+
 const userService = {
+	authenticate : authenticate,
 	getUserByName : getUserByName
 };
 
