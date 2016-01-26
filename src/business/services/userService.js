@@ -1,5 +1,5 @@
-import UserModel from '../../database/models/user';
 import ServiceBase from './ServiceBase';
+import UserModel from '../../database/models/user';
 import UserConverter from '../converters/UserConverter';
 
 export default class UserService extends ServiceBase {
