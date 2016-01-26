@@ -2,46 +2,57 @@ import apiRoutes from './api';
 import userRoutes from './users';
 import playerRoutes from './players';
 import ApiRoute from './ApiRoute';
+import RouteTable from './RouteTable';
+import { decodeTokenMiddleware } from './middleware';
+import { authenticate } from './auth';
 
-var allRoutes = [].concat(apiRoutes, userRoutes, playerRoutes);
+var routes = apiRoutes.concat(userRoutes, playerRoutes);
+var routeTable = new RouteTable(routes);
 
-export const getAllRoutes = () => {
-	return allRoutes;
-}
+function attachRoutesToRouter(routes = [], router){
+		if (!router){
+			throw Error('router cannot be null');
+		}
 
-export const createRoute = (endpoint, handler, method, isPublic) => {
-	return new ApiRoute(endpoint, handler, method, isPublic);
-}
-
-export const addRoutesToRouter = (routes = [], router)  => {
-	if (!router){
-		throw Error('router cannot be null');
+		for(let index in routes) {		
+			let { method, endpoint, handler, isPublic } = routes[index];						
+			let methodLowerCased = method.toLowerCase().trim();
+			let securedRoute = isPublic ? 'public' : 'secure';
+			if (router[methodLowerCased]) {			
+				router[methodLowerCased](endpoint, handler);			
+				console.log(`initialized ${securedRoute} route ${method} ${endpoint}`);
+			}				
+		}
 	}
 
-	for(let index in routes){		
-		let { method, endpoint, handler } = routes[index];						
-		let methodLowerCased = method.toLowerCase().trim();
-		if (router[methodLowerCased]) {			
-			router[methodLowerCased](endpoint, handler);			
-		}				
-	}
-}
+export function configureRoutes(app, router) {
 
-export const isSecureRoute = (endpoint) => {
-	if (!endpoint) 	{
-			throw Error('endpoint cannot be null');
-	}
-		
-	let routes = allRoutes.filter((r) => { 		
-		return r.endpoint.trim().toLowerCase() === endpoint.trim().toLowerCase();
+	// apply decoding middleware for each secure route
+	router.use((req, res, next) => { 	
+		  let route = routeTable.getRouteByEndpoint(req.url);
+		  if (route && route.isPublic)
+		  {
+		    console.log('public route. skip decoding token');
+		    next();
+		    return;
+		  }
+
+			decodeTokenMiddleware(req, res, next);
 	});
 
-	return (routes.length == 1 && routes[0].isPublic === false);
+	// add an authentication route to the route table		
+	routeTable.addRoute(
+		new ApiRoute({endpoint: '/authenticate', method: 'POST', handler: authenticate, isPublic: true })
+	);
+
+	// attach the routes to the router
+	attachRoutesToRouter(routeTable.routes, router);
+
+	// apply the routes to our application with the prefix /api
+	app.use('/api', router);	
 }
 
-export default {
-	addRoutesToRouter,	
-	isSecureRoute,
-	getAllRoutes	
-};
+export default routeTable;
+
+
 

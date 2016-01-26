@@ -6,16 +6,28 @@ class ServiceBase {
 		this.converter = props.converter;
 	}
 
+	_convertItem(item){
+		return item && this.converter.convertFrom(item);
+	}
+
+	_convertItems(items){
+		var list = [];
+		for (var i =  0; i < items.length; i++) {
+			let item = this._convertItem(items[i]);
+			item && list.push(item);
+		};
+		return list;
+	}
+
+	__handleResponse(response){
+		if( Object.prototype.toString.call(response).toLowerCase() === '[object array]' ) {				
+			return this._convertItems(response);
+		}				
+		return this._convertItem(response);
+	}
+
 	callApi(promise, onFetched) {
-			return runAsync(promise, (model) => {
-				if (onFetched)
-				{
-					return onFetched(model);
-				}
-				// TODO: check if the model is a single instance or an array
-				// if its an array iterate and create entities for it to return.
-				return model && this.converter.convertFrom(model);
-			});
+		return runAsync(promise, (response) => this.__handleResponse(response));
 	}
 }
 

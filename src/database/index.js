@@ -9,11 +9,14 @@ export function connectionError(error) {
 	console.log('An error occured connecting to the database');
 }
 
-export function connectToDatabase(connectionString) {
+export function configureDatabase(connectionString) {
 	if (!connectionString){
 		throw Error('connectionString cannot be null');
 	}
 	
+	// this makes all database call async based on promises
+	// instead of callback methods.
+	// no need to include bluebird library where the database is called.
 	mongoose.Promise = Promise;
 	mongoose.connect(connectionString);
 

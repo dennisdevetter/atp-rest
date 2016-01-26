@@ -1,7 +1,10 @@
 const allowedMethods = ['GET', 'PUT', 'DELETE', 'POST'];
 
 export default class ApiRoute {
-	constructor(endpoint, handler, method = 'GET', isPublic = false){
+	
+	constructor(options){
+		let { endpoint, handler, method = 'GET', isPublic = false } = options;
+
 		if (!endpoint || endpoint.trim() === ''){
 				throw Error('endpoint cannot be null');
 		}
@@ -21,3 +24,4 @@ export default class ApiRoute {
 		this.isPublic = isPublic;
 	}
 };
+

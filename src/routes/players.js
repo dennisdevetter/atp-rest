@@ -5,7 +5,7 @@ export function createNewPlayer(req, res) {
 }
 
 var playerRoutes = [
-  new ApiRoute('/player/create', createNewPlayer)
+  new ApiRoute({endpoint: '/player/create',  handler: createNewPlayer})
 ]
 
 export default playerRoutes;

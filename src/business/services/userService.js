@@ -1,5 +1,5 @@
 import ServiceBase from './ServiceBase';
-import UserModel from '../../database/models/user';
+import UserModel from '../../database/models/UserModel';
 import UserConverter from '../converters/UserConverter';
 
 export default class UserService extends ServiceBase {
@@ -8,13 +8,35 @@ export default class UserService extends ServiceBase {
 	}
 
 	getUsers() {
-		return this.callApi(UserModel.find());
+		return this.callApi(UserModel.find({}));
 	}
 	
-	getUserByName(username) {			
+	getUserByName(name) {			
 		return this.callApi(UserModel.findOne({
-			name: username
+			name: name
 		}));			
+	}
+
+	getUserById(id) {			
+		return this.callApi(UserModel.findOne({
+			id: id
+		}));			
+	}
+
+	addUser(user) {
+		let { name, email, password, admin = false} = user;
+
+	  var userModel = new UserModel({ 
+	    name: name, 
+	    email: email,
+	    password: password,
+	    admin: admin 
+	  });
+
+		return userModel.save((user) => {
+			 console.log('User saved successfully');
+		   return user;
+		});		
 	}
 
 	authenticate(username, password){
