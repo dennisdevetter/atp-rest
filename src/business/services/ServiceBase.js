@@ -12,6 +12,8 @@ class ServiceBase {
 				{
 					return onFetched(model);
 				}
+				// TODO: check if the model is a single instance or an array
+				// if its an array iterate and create entities for it to return.
 				return model && this.converter.convertFrom(model);
 			});
 	}

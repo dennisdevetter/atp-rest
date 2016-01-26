@@ -2,9 +2,13 @@ import UserModel from '../../database/models/user';
 import ServiceBase from './ServiceBase';
 import UserConverter from '../converters/UserConverter';
 
-export class _UserService extends ServiceBase {
-	constructor(props){
+export default class UserService extends ServiceBase {
+	constructor(props = { converter: UserConverter }){
 		super(props);		
+	}
+
+	getUsers() {
+		return this.callApi(UserModel.find());
 	}
 	
 	getUserByName(username) {			
@@ -33,6 +37,3 @@ export class _UserService extends ServiceBase {
 		});
 	}
 }
-
-const userService = new _UserService({ converter: UserConverter});
-export default userService;
