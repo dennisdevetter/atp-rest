@@ -18,22 +18,12 @@ const mainFile = manifest.main;
 const destinationFolder = path.dirname(mainFile);
 const exportFileName = path.basename(mainFile, path.extname(mainFile));
 
-var firstBuild = true;
-
 function cleanDist(done) {
   del([destinationFolder]).then(() => done());
 }
 
-function cleanTmp(done) {
-  del(['tmp']).then(() => done());
-}
-
 function cleanCoverage(done){
  del(['coverage']).then(() => done()); 
-}
-
-function cleanTmp(done) {
-  del(['tmp']).then(() => done());
 }
 
 function onError() {
@@ -109,21 +99,8 @@ function watch() {
   gulp.watch(watchFiles, ['test']);
 }
 
-function liveReload(){  
-  if (firstBuild) {
-    $.livereload.listen({port: 35729, host: 'localhost', start: true});
-    var watcher = gulp.watch(watchFiles, ['lint']);
-  } else {
-    $.livereload.reload('./tmp/__spec-build.js');
-  }
-  firstBuild = false;
-}
-
 // Remove the built files
 gulp.task('clean', cleanDist);
-
-// Remove our temporary files
-gulp.task('clean-tmp', cleanTmp);
 
 // Remove coverage folder
 gulp.task('clean-coverage', cleanCoverage);

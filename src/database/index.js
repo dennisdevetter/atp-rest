@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 import Promise from 'bluebird';
 
 export function connectionEstablished() {	
-	console.log("connection established");
+	console.log('connection established');
 }
 
 export function connectionError(error) {
-	console.log("An error occured connecting to the database");
+	console.log('An error occured connecting to the database');
 }
 
 export function connectToDatabase(connectionString) {

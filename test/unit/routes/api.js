@@ -1,5 +1,5 @@
 import {index, authenticate} from '../../../src/routes/api';
-import userModel from '../../../src/models/user';
+import userModel from '../../../src/database/models/user';
 
 describe('route /api', () => {
   describe('calling the endpoint /index', () => {
