@@ -1,9 +1,10 @@
-import userService from '../business/services/userService';
+import UserService from '../business/services/UserService';
 import jwt from 'jsonwebtoken';
 import ApiRoute from './ApiRoute';
 
 // the token expire timout is set to 24 hours.
 let tokenExpireTimeOut = 1440;
+
 
 export function createToken(value, secret, expirationTime) {
   var token = jwt.sign(value, secret, {
@@ -22,7 +23,7 @@ export function authenticate(app, req, res) {
 	var username = req.body.username; 
   var password = req.body.password;
 
-  userService.authenticate(username, password).then((result => {
+  UserService.authenticate(username, password).then((result => {
       let { authenticated, message } = result;
 
       if (!authenticated) {
