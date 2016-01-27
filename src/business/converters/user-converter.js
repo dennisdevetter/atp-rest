@@ -1,5 +1,5 @@
-import UserEntity from '../entities/UserEntity';
-import UserModel from '../../database/models/UserModel';
+import UserEntity from '../entities/user-entity';
+import UserModel from '../../database/models/user-model';
 
 function convertFrom(model){
 	let entity = new UserEntity({
@@ -24,11 +24,8 @@ function convertTo(entity){
 	return model;
 };
 
-
-const UserConverter = {
+export default {
 	convertFrom : convertFrom,
 	convertTo : convertTo
-}
-
-export default UserConverter;
+};
 

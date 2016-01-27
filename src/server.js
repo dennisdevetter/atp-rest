@@ -22,15 +22,14 @@ app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + port + '/api');
 });
 
+// add configuration
+app.set('superSecret', config.secret); 
+
 // set up database
 configureDatabase(config.database);
 
 // configure the api routes
-var routeTable = configureRoutes(app, express.Router());
-
-// add application configuration to the express server
-app.set('superSecret', config.secret); // secret variable
-app.set('RouteTable', routeTable); // the registered routes
+configureRoutes(app);
 
 // =======================
 // start the server ======

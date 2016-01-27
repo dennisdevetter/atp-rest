@@ -1,12 +1,12 @@
-import ServiceBase from './ServiceBase';
-import UserModel from '../../database/models/UserModel';
-import UserConverter from '../converters/UserConverter';
+import Service from './service';
+import UserModel from '../../database/models/user-model';
+import UserConverter from '../converters/user-converter';
 
-export default class UserService extends ServiceBase {
+export default class UserService extends Service {
 	constructor(props = { converter: UserConverter }){
 		super(props);		
 	}
-
+	
 	getUsers() {
 		let query = UserModel.find({});
 		return this.request(query);
@@ -32,9 +32,7 @@ export default class UserService extends ServiceBase {
 	    admin: admin 
 	  });
 
-		return userModel.save((response) => {		 
-		   return user;
-		});		
+		return userModel.save().then(this.__saveResponse);
 	}
 
 	authenticate(username, password){
@@ -56,4 +54,9 @@ export default class UserService extends ServiceBase {
 			  };  
 		});
 	}
+
+	// private methods
+	__saveResponse(response, numberAffected) {
+		return response && response._id;
+	}	
 }

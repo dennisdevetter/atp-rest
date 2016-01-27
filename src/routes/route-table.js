@@ -14,6 +14,8 @@ class RouteTable {
 				throw Error('endpoint cannot be null');
 		}
 			
+		// todo match uri with route using regex....
+		
 		let filteredRoutes = this.routes.filter((route) => { 					
 			return route.endpoint.trim().toLowerCase() === endpoint.trim().toLowerCase();
 		});

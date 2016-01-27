@@ -1,9 +1,7 @@
-import UserService from './UserService';
+import UserService from './user-service';
 
-export const userService = new UserService();
-
-const serviceFactory = {
-	userService
+var userService = new UserService();
+	
+export default {
+	userService : userService
 }
-
-export default serviceFactory;

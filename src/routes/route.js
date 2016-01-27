@@ -1,6 +1,6 @@
 const allowedMethods = ['GET', 'PUT', 'DELETE', 'POST'];
 
-export default class ApiRoute {
+export default class Route {
 	
 	constructor(options){
 		let { endpoint, handler, method = 'GET', isPublic = false } = options;
@@ -9,6 +9,7 @@ export default class ApiRoute {
 				throw Error('endpoint cannot be null');
 		}
 
+		// todo,allow multiple methods (split input into array)..		
 		method = method.trim().toUpperCase();
 		if (allowedMethods.indexOf(method) == -1){
 			throw Error(`method '${method}' is not allowed`);	
