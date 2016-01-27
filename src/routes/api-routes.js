@@ -1,6 +1,6 @@
 import Route from './route';
 
-export default function(app) {
+export default function({ app }) {
 
 	function index(req, res) {
 		console.log('index');

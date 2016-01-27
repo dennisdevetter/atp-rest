@@ -1,6 +1,6 @@
 import Route from './route';
 
-export default function(app) {
+export default function({ app }) {
 
 	function addPlayer(req, res) {
 		console.log('addPlayer');

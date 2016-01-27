@@ -64,7 +64,8 @@
     "webpack-stream": "^3.1.0",
     "babel-cli": "~6.4.5",
     "file-loader": "~0.8.5",
-    "node-loader": "~0.5.0"
+    "node-loader": "~0.5.0",
+    "sinon-as-promised": "~4.0.0"
   },
   "babelBoilerplateOptions": {
     "entryFileName": "server"

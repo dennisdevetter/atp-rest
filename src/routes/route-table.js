@@ -1,6 +1,6 @@
 class RouteTable {
 
-	constructor(routes = []){
+	constructor({ routes = [] }){
 		this.routes = routes;
 	}
 

@@ -3,7 +3,7 @@ import RouteTable from './route-table';
 import createRoutes from './routes';
 import createMiddleware from './middleware';
 
-function attachRoutesToRouter(router, routeTable){
+function attachRoutesToRouter({ router, routeTable }){
   let routes = routeTable.routes;
 
   for(let index in routes) {    
@@ -18,16 +18,16 @@ function attachRoutesToRouter(router, routeTable){
   }    
 }
 
-export function configureRoutes(app) {
+export function configureRoutes({ app }) {
 	
-	let routes = createRoutes(app);
-	let routeTable = new RouteTable(routes);
+	let routes = createRoutes({ app });
+	let routeTable = new RouteTable({ routes });
 	let router = express.Router();
 
-	let middleware = createMiddleware(app);
-	middleware.configure(router, routeTable);
+	let middleware = createMiddleware({ app });
+	middleware.configure({ router, routeTable });
 
-	attachRoutesToRouter(router, routeTable);
+	attachRoutesToRouter({ router, routeTable });
 
 	// apply the routes to our application with the prefix /api	
 	app.use('/api', router);	

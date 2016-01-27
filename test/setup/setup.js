@@ -11,10 +11,10 @@ module.exports = function(root) {
     root.mock = root.sandbox.mock.bind(root.sandbox);
     root.useFakeTimers = root.sandbox.useFakeTimers.bind(root.sandbox);
     root.useFakeXMLHttpRequest = root.sandbox.useFakeXMLHttpRequest.bind(root.sandbox);
-    root.useFakeServer = root.sandbox.useFakeServer.bind(root.sandbox);
+    root.useFakeServer = root.sandbox.useFakeServer.bind(root.sandbox);    
   });
 
-  afterEach(function() {
+  afterEach(function() {    
     delete root.stub;
     delete root.spy;
     root.sandbox.restore();

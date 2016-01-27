@@ -4,7 +4,7 @@ import services from '../business/services';
 
 var userService = services.userService;
 
-export default function(app) {
+export default function({ app }) {
 
   function addUser(req, res) {  
     let name = req.body.name;
@@ -19,7 +19,7 @@ export default function(app) {
           res.json({ id });                
           return;
         }               
-        res.status(409 ).send('The user could not be added. see log.');
+        res.status(409).send('The user could not be added. see log.');
       });  
   }
 

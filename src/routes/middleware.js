@@ -1,6 +1,6 @@
 import tokenizer from '../utils/tokenizer';
 
-function middleware(app) {
+function middleware({ app }) {
 
   function decodeTokenMiddleware(req, res, next) {  
     console.log('applying decode token middleware');
@@ -29,7 +29,7 @@ function middleware(app) {
     });
   }
 
-  function configure(router, routeTable) {
+  function configure({ router, routeTable }) {
     //applying middleware
     router.use((req, res, next) => {  
         let route = routeTable.getRouteByEndpoint(req.url);

@@ -29,7 +29,7 @@ app.set('superSecret', config.secret);
 configureDatabase(config.database);
 
 // configure the api routes
-configureRoutes(app);
+configureRoutes({app});
 
 // =======================
 // start the server ======
