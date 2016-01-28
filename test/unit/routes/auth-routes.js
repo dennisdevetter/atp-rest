@@ -13,6 +13,7 @@ describe('auth routes',() => {
   var routeArray = routes({app});      
   tokenizer.create = (a) => 'the token';        
   var UserService = services.userService;
+
   
   // =======================================    
   // test setup
