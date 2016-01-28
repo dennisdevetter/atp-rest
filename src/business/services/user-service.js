@@ -31,7 +31,7 @@ export default class UserService extends Service {
 	    password: password,
 	    admin: admin 
 	  });
-
+		
 		return userModel.save().then(this.__saveResponse);
 	}
 
@@ -56,7 +56,7 @@ export default class UserService extends Service {
 	}
 
 	// private methods
-	__saveResponse(response, numberAffected) {
+	__saveResponse(response, numberAffected) {		
 		return response && response._id;
 	}	
 }

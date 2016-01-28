@@ -1,7 +1,8 @@
 import UserService from './user-service';
 
-var userService = new UserService();
-	
+/* creates the service layer */
+const userService = new UserService();
+
 export default {
-	userService : userService
-}
+	userService
+};

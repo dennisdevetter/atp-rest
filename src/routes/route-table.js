@@ -1,3 +1,7 @@
+function normalize(value){
+	return value.trim().toLowerCase();
+}
+
 class RouteTable {
 
 	constructor({ routes = [] }){
@@ -13,14 +17,18 @@ class RouteTable {
 		if (!endpoint) 	{
 				throw Error('endpoint cannot be null');
 		}
-			
-		// todo match uri with route using regex....
 		
+		// todo match uri with route using regex....	
 		let filteredRoutes = this.routes.filter((route) => { 					
-			return route.endpoint.trim().toLowerCase() === endpoint.trim().toLowerCase();
+			return normalize(route.endpoint) === normalize(endpoint);
 		});
 
-		return (filteredRoutes.length == 1 && filteredRoutes[0]);
+		if (filteredRoutes.length == 1)
+		{
+			return filteredRoutes[0];	
+		}
+
+		return null;
 	}
 }
 

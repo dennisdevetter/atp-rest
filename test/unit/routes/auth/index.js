@@ -1,8 +1,8 @@
-import routes from '../../../src/routes/auth-routes';
-import userModel from '../../../src/database/models/user-model';
-import services from '../../../src/business/services';
-import tokenizer from '../../../src/utils/tokenizer';
-import helper from './helper';
+import routes from '../../../../src/routes/auth-routes';
+import userModel from '../../../../src/database/models/user-model';
+import services from '../../../../src/business/services';
+import tokenizer from '../../../../src/utils/tokenizer';
+import helper from '../helper';
 
 describe('auth routes',() => {
   // =======================================
@@ -12,8 +12,6 @@ describe('auth routes',() => {
 
   var routeArray = routes({app});      
   tokenizer.create = (a) => 'the token';        
-  var UserService = services.userService;
-
   
   // =======================================    
   // test setup
@@ -55,7 +53,7 @@ describe('auth routes',() => {
         let authenticated = false, message = 'failed';               
         let result = { authenticated, message};
         
-        var serviceStub = root.sandbox.stub(UserService, 'authenticate').resolves(result);
+        var serviceStub = root.sandbox.stub(services.userService, 'authenticate').resolves(result);
         authenticateRoute.handler(request, response); 
         
         serviceStub().then((value) => {
@@ -70,7 +68,7 @@ describe('auth routes',() => {
         let token = 'the token';
         let result = { authenticated, message};
         
-        var serviceStub = root.sandbox.stub(UserService, 'authenticate').resolves(result);
+        var serviceStub = root.sandbox.stub(services.userService, 'authenticate').resolves(result);
         authenticateRoute.handler(request, response); 
         
         serviceStub().then((value) => {
@@ -86,7 +84,7 @@ describe('auth routes',() => {
       it('should handle error', (done) => {                               
         let authenticated = true, message = '', errorMessage = 'something went wrong';   
         
-        var serviceStub = root.sandbox.stub(UserService, 'authenticate').rejects(errorMessage);        
+        var serviceStub = root.sandbox.stub(services.userService, 'authenticate').rejects(errorMessage);        
         authenticateRoute.handler(request, response);         
         
         serviceStub().catch((error) => {          

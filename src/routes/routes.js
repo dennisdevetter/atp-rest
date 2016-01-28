@@ -1,9 +1,9 @@
-	export default function({ app }) {
+	export default function(options) {
 		
-		var api = require('./api-routes').default({ app });
-		var auth = require('./auth-routes').default({ app });
-		var users = require('./user-routes').default({ app });
-		var players = require('./player-routes').default({ app });
+		var api = require('./api').default(options);
+		var auth = require('./auth').default(options);
+		var users = require('./users').default(options);
+		var players = require('./players').default(options);
 
 		return [
 			...api,

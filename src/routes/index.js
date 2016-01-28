@@ -18,13 +18,14 @@ function attachRoutesToRouter({ router, routeTable }){
   }    
 }
 
-export function configureRoutes({ app }) {
-	
-	let routes = createRoutes({ app });
-	let routeTable = new RouteTable({ routes });
-	let router = express.Router();
+export function configureRoutes(options) {
+	let { app } = options;
 
-	let middleware = createMiddleware({ app });
+  let router = express.Router();
+	let routes = createRoutes(options);
+	let routeTable = new RouteTable({ routes });	
+
+	let middleware = createMiddleware(options);
 	middleware.configure({ router, routeTable });
 
 	attachRoutesToRouter({ router, routeTable });
