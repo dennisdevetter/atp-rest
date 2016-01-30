@@ -50,7 +50,7 @@ export default function userService(options){
 		});
 
 		return Promise.all(requests).then((response) => {
-			console.log("succeeded:" + succeeded.length);
+			console.log('succeeded:' + succeeded.length);
 			console.log(succeeded);
 			return succeeded;
 		});

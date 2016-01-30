@@ -1,4 +1,4 @@
-import config from '../../src/config';
+import config from '../../../src/config';
 
 describe('config', () => {
   describe('return value', () => {
