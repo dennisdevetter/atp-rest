@@ -3,10 +3,9 @@ import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({ 
-    name: String, 
+    username: String, 
     email : String,
-    password: String, 
-    admin: Boolean 
+    password: String    
 });
 
 export default mongoose.model('User', userSchema);

@@ -8,6 +8,8 @@ import babel from 'gulp-babel';
 import mochaGlobals from './test/setup/.globals';
 import manifest  from './package.json';
 import { Instrumenter } from 'isparta';
+import nodemon from 'gulp-nodemon';
+import notify from 'gulp-notify';
 
 // Load all of our Gulp plugins
 const $ = loadPlugins();
@@ -50,6 +52,22 @@ function lintTest() {
 
 function lintGulpfile() {
   return lint('gulpfile.babel.js');
+}
+
+function start(){  
+  var path = './src/server.js';
+    nodemon({
+      exec: 'babel-node',
+      presets: 'es2015',
+      script: path,
+      ext: 'js',
+      env: { 'NODE_ENV': 'development' },
+      tasks: [] // perform these tasks before starting the server
+    }).on('start', function(){      
+      notify('nodemon started.');
+    }).on('restart', function(){
+      console.log('restarted');      
+    });
 }
 
 function build() {
@@ -98,6 +116,9 @@ const watchFiles = ['src/**/*', 'test/**/*', 'package.json', '**/.eslintrc', '.j
 function watch() {
   gulp.watch(watchFiles, ['test']);
 }
+
+// start the server in development mode
+gulp.task('start', start);
 
 // Remove the built files
 gulp.task('clean', cleanDist);

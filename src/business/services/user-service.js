@@ -1,42 +1,78 @@
-import Service from './service';
 import UserModel from '../../database/models/user-model';
-import UserConverter from '../converters/user-converter';
+import Promise from 'bluebird';
 
-export default class UserService extends Service {
-	constructor(props = { converter: UserConverter }){
-		super(props);		
-	}
-	
-	getUsers() {
-		let query = UserModel.find({});
-		return this.request(query);
-	}
-	
-	getUserByName(name) {			
-		let query = UserModel.findOne({ name: name });
-		return this.request(query);			
+export default function userService(options){
+
+	// exposed service methods
+	return {
+		list,
+		save,
+		remove,
+		getByUserName,
+		authenticate
 	}
 
-	getUserById(id) {			
-		let query = UserModel.findOne({ _id: id	});			
-		return this.request(query);
+	// query for users
+	function list(query){		
+		// todo options
+		let options = {};
+		return UserModel.find(options).then((response) => {
+			// todo convert response
+			console.log('found users');
+			return response;
+		});
 	}
 
-	addUser(user) {
-		let { name, email, password, admin = false} = user;
+	// insert or update users
+	function save(users = []){
 
-	  var userModel = new UserModel({ 
-	    name: name, 
-	    email: email,
-	    password: password,
-	    admin: admin 
-	  });
-		
-		return userModel.save().then(this.__saveResponse);
+		var requests  = [];
+		var succeeded = [];
+		var failed = [];
+
+		users.forEach((user) => {
+			let { username, email, password } = user;
+
+			// todo.. check if user already exists.. if so throw error.
+			
+			var userModel = new UserModel({ 
+				username: username, 
+				email: email,
+				password: password	    
+			});
+
+			console.log('saving ' + userModel);		
+			requests.push(userModel.save());
+			userModel.save().then((response) => {
+				// todo check for failed or success
+				succeeded.push(response);				
+			})	
+		});
+
+		return Promise.all(requests).then((response) => {
+			console.log("succeeded:" + succeeded.length);
+			console.log(succeeded);
+			return succeeded;
+		});
 	}
 
-	authenticate(username, password){
-		return this.getUserByName(username).then((user)=> {    
+	// remove users
+	function remove(users = []){
+		// todo define what to remove
+		return UserModel.find({}).remove();
+	}
+
+	// get single user by username
+	function getByUserName (username) {			
+		return UserModel.findOne({ username: username }).then((response => {
+			// todo convert response
+			return response;
+		}));		
+	}
+
+	// simple authentication by username and password
+	function authenticate(username, password){
+		return getByUserName(username).then((user)=> {    
 	     if (!user) {
 			    return { 
 			      authenticated: false,
@@ -55,8 +91,4 @@ export default class UserService extends Service {
 		});
 	}
 
-	// private methods
-	__saveResponse(response, numberAffected) {		
-		return response && response._id;
-	}	
 }

@@ -1,7 +1,7 @@
-import UserService from './user-service';
+import createUserService from './user-service';
 
 /* creates the service layer */
-const userService = new UserService();
+const userService = createUserService();
 
 export default {
 	userService
