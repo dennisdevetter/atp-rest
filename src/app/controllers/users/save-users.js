@@ -1,4 +1,4 @@
-import services from '../../../business/services';
+import services from '../../../services';
 
 export default function saveUsers(req, res, next){
 	let { users = []} = req;

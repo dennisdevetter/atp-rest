@@ -1,4 +1,4 @@
-import services from '../../../business/services';
+import services from '../../../services';
 
 export default function listUsers(req, res, next) {
 	services.userService.list([]).then((result) => {
