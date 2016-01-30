@@ -1,8 +1,6 @@
 import tokenizer from '../../utils/tokenizer';
 
 const decodeTokenMiddleware = ({ app }) => (req, res, next) => {  
-  console.log('applying decode token middleware');
-
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
 

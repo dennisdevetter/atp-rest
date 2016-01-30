@@ -18,7 +18,6 @@ export default function userService(options){
 		let options = {};
 		return UserModel.find(options).then((response) => {
 			// todo convert response
-			console.log('found users');
 			return response;
 		});
 	}
@@ -40,8 +39,7 @@ export default function userService(options){
 				email: email,
 				password: password	    
 			});
-
-			console.log('saving ' + userModel);		
+			
 			requests.push(userModel.save());
 			userModel.save().then((response) => {
 				// todo check for failed or success
@@ -49,9 +47,8 @@ export default function userService(options){
 			})	
 		});
 
-		return Promise.all(requests).then((response) => {
-			console.log('succeeded:' + succeeded.length);
-			console.log(succeeded);
+		return Promise.all(requests).then((response) => {						
+			// todo convert the entities (update id's for new users)
 			return succeeded;
 		});
 	}

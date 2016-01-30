@@ -1,12 +1,11 @@
-import createUserController from './user-controller';
-import createHomeController from './home-controller';
-import createAuthController from './auth-controller';
+import home from './home';
+import users from './users';
+import auth from './auth';
 
-export function createControllers(options){		
-	
+export function createControllers(options){			
 	return [
-		createHomeController(options),
-		createUserController(options),
-		createAuthController(options)
+		home(options),
+		users(options),
+		auth(options)
 	]		
 }
