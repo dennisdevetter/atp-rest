@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 describe('user model',() => {
-	it('should create a schema and return the model', () => {                       	    
+	it('should return the user model', () => {                       	    
 	    var systemUnderTest = require('../../../../src/database/models/user-model').default;
 	    expect(systemUnderTest.modelName).to.be.equal('User');
 	});
 
-	it('should create a schema and return the model', () => {                       	    
+	it('should create a schema', () => {                       	    
 		// arrange
 	    var { getSchema } = require('../../../../src/database/models/user-model');
 	    
