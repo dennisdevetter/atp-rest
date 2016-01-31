@@ -1,13 +1,10 @@
 import express from 'express';
-import createAuthorizeRequestPipe from '../../middleware/decode-token';
-import normalizeSaveRequest from './normalize-save-request';
-import listUsers from './list-users';
-import removeUsers from './remove-users';
-import saveUsers from './save-users';
+import { decodeToken as createAuthorizeRequest } from '../middleware/auth';
+import { normalizeSaveRequest, listUsers, removeUsers, saveUsers} from '../middleware/users';
 
 export default function createController(options) {
 	var router = express.Router();
-	var authorize = createAuthorizeRequestPipe(options);
+	var authorize = createAuthorizeRequest(options);
 
 	let routeName = '/users';
 

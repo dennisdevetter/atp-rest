@@ -1,7 +1,5 @@
 import express from 'express';
-import normalizeRequest from './normalize-request';
-import authorizeRequest from './authorize';
-import createResponseToken from './create-token';
+import { normalizeRequest, authorizeRequest, createToken} from '../middleware/auth';
 
 export default function createController(options) {
 	var router = express.Router();
@@ -9,7 +7,7 @@ export default function createController(options) {
 	router.route('/auth')
 		  .post(normalizeRequest)
 		  .post(authorizeRequest)
-		  .post(createResponseToken(options));
+		  .post(createToken(options));
 
     return router;
 }

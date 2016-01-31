@@ -1,13 +1,10 @@
-import encodedBodyParser from './encoded-body-parser';
-import jsonBodyParser from './json-body-parser';
-import requestLoggerPipe from './request-logger';
-import indexHttpRequest from './index-http-request';
+import { encodedBodyParser, jsonBodyParser, requestLogger, indexHttpRequest} from './misc';
 
 export function createRequestPipeline(options) {
 	return {
 		encodedBodyParser : encodedBodyParser(options),
 		jsonBodyParser : jsonBodyParser(options),
-		requestLogger : requestLoggerPipe(options)
+		requestLogger : requestLogger(options)
 	}
 }
 

@@ -1,11 +1,11 @@
 import express from 'express';
-import welcome from './welcome';
+import { welcomeRequest } from '../middleware/home';
 
 export default function createController(options) {
 	var router = express.Router();
 
 	router.route('/')
-		  .get(welcome);
+		  .get(welcomeRequest);
 
     return router;
 }
