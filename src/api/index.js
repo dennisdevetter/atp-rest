@@ -1,8 +1,7 @@
 import middleware from './middleware';
 import controllers from './controllers';
-import dataStore from '../database';
 
-function startServer(options){
+function startServer(options = {}){
 	let { app, config } = options;			
 	let { api, secret, database } = config;
 	let { port, name } = api;		
@@ -26,9 +25,6 @@ function startServer(options){
 	controllers.create({ app }).forEach((route) => {
 		app.use(name, route);
 	});;	
-
-	// // configure connection to the database
-	dataStore.configure(database);
 
 	// // starts the server
 	app.listen(port);

@@ -1,6 +1,5 @@
 var api = require('../../../src/api').default; 
 import controllers from '../../../src/api/controllers';
-import dataStore from '../../../src/database';
 import middleware from '../../../src/api/middleware';
 
 describe('The application',() => {     
@@ -17,8 +16,7 @@ describe('The application',() => {
           name: 'the api', 
           port: 2000 
         },
-        secret: 'the secret',
-        database: 'the database' 
+        secret: 'the secret'        
     };    
     var options = { app, config };
     var endpoint = 'http://localhost:' + options.config.api.port + options.config.api.name;
@@ -31,8 +29,7 @@ describe('The application',() => {
     var createRequestPipeline = root.sandbox.stub(middleware, 'createRequestPipeline').returns(requestPipes);
     var createApiEndpoint = root.sandbox.stub(middleware, 'createApiEndpoint').returns(apiEndpointHandler);
     var createControllers = root.sandbox.stub(controllers, 'create').returns(routeControllers);
-    var configureDataStore = root.sandbox.stub(dataStore, 'configure');
-
+    
     // act
     api.start(options); 
 
@@ -47,8 +44,7 @@ describe('The application',() => {
     routeControllers.forEach((controller) => {
        expect(app.use).to.have.been.calledWith(config.api.name, controller);
     })    
-
-    expect(configureDataStore).to.have.been.calledWith(config.database);  
+    
     expect(app.listen).to.have.been.calledWith(config.api.port);
   });
 });  
