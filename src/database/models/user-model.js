@@ -8,4 +8,9 @@ var userSchema = new Schema({
     password: String    
 });
 
+export function getSchema(){
+	return userSchema;
+}
+
 export default mongoose.model('User', userSchema);
+

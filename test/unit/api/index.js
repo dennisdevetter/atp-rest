@@ -1,4 +1,4 @@
-var api = require('../../../src/api').default; 
+var systemUnderTest = require('../../../src/api').default; 
 import controllers from '../../../src/api/controllers';
 import middleware from '../../../src/api/middleware';
 
@@ -31,7 +31,7 @@ describe('The application',() => {
     var createControllers = root.sandbox.stub(controllers, 'create').returns(routeControllers);
     
     // act
-    api.start(options); 
+    systemUnderTest.start(options); 
 
     // assert    
     expect(app.set).to.have.been.calledWith('superSecret', config.secret);

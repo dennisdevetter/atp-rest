@@ -35,10 +35,8 @@ describe('the database',() => {
 		var connect = root.sandbox.stub(mongoose, 'connect').throws(somethingWentWrong);
 
 		// act
-		var promise = systemUnderTest.configure(options);
-
 		// assert
-		promise.catch((error) => {
+		systemUnderTest.configure(options).catch((error) => {
 			expect(error).to.equal(somethingWentWrong);		
 			done();
 		})

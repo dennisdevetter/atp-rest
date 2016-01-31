@@ -1,14 +1,14 @@
-import config from '../../../src/config';
+import systemUnderTest from '../../../src/config';
 
 describe('config', () => {
   describe('return value', () => {
 
     it('should have a value for secret', () => {
-      expect(config.secret).to.not.be.empty;
+      expect(systemUnderTest.secret).to.not.be.empty;
     });
 
     it('should have a value for database', () => {
-      expect(config.database).to.not.be.empty;
+      expect(systemUnderTest.database).to.not.be.empty;
     });
   });
 });
