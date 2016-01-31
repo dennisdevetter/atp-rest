@@ -1,4 +1,4 @@
-import services from '../../../services';
+import services from '../../services';
 
 export default function authorize(req, res, next) {
 	let { username, password } = req.login;	

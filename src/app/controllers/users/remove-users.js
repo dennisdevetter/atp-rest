@@ -1,4 +1,4 @@
-import services from '../../../services';
+import services from '../../services';
 
 export default function removeUsers(req, res, next) {
 	let users = {};	

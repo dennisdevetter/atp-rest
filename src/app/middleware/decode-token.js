@@ -1,4 +1,4 @@
-import tokenizer from '../../utils/tokenizer';
+import tokenizer from '../utils/tokenizer';
 
 const decodeTokenMiddleware = ({ app }) => (req, res, next) => {  
   // check header or url parameters or post parameters for token

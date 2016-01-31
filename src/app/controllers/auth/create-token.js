@@ -1,4 +1,4 @@
-import tokenizer from '../../../utils/tokenizer';
+import tokenizer from '../../utils/tokenizer';
 
 export default function createToken({app}) {
 	return function (req, res){
