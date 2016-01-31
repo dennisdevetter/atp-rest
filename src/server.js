@@ -1,7 +1,9 @@
 // starts the rest api
-var app = require('./app').default;
+var api = require('./api').default;
 var config = require('./config').default;
+var express = require('express');
 
-app.start(config);
+var app = express();
+api.start({app, config});
 
 

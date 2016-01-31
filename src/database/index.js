@@ -18,6 +18,10 @@ export function configureDatabase(options) {
 	mongoose.connect(connectionString);
 	
 	let db = mongoose.connection;
-	db.on('error', connectionError);
+	db.on('error', connectionError); 
 	db.once('open', connectionEstablished);
+}
+
+export default {
+	configure : configureDatabase
 }

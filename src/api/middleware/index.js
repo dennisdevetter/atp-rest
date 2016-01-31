@@ -11,3 +11,8 @@ export function createRequestPipeline(options) {
 export function createApiEndpoint(endpoint) {	
 	return indexHttpRequest(endpoint);	
 }
+
+export default {
+	createRequestPipeline,
+	createApiEndpoint
+}
