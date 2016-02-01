@@ -6,9 +6,6 @@ global.rewire = require('rewire');
 require('babel-core/register');
 require('./setup')();
 
-//allow stubbing of promises
-//var sinonStubPromise = require('sinon-stub-promise');
-//sinonStubPromise(sinon);
-
+// allows testing of promises
 var Bluebird = require('bluebird');
 require('sinon-as-promised')(Bluebird)
