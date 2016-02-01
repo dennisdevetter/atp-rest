@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Promise from 'bluebird';
-import systemUnderTest from '../../../src/database';
+var systemUnderTest = require('../../../src/database');
 
 describe('the database',() => {    
 	it('should return a promise and connect when given a proper connectionstring', () => {                          
@@ -11,7 +11,7 @@ describe('the database',() => {
 		var onSuccess = root.sandbox.stub(mongoose.connection, 'once');
 
 		// act
-		var promise = systemUnderTest.configure(options);
+		var promise = systemUnderTest.configureDatabase(options);
 
 		//assert				
 		expect(connect).to.have.been.calledWith(options.connectionString); 
@@ -22,11 +22,11 @@ describe('the database',() => {
 	});	
 	it('should throw an error when the connectionstring is null', () => {                              	    
 	    var options = { connectionstring : null};
-	  	expect(systemUnderTest.configure.bind(systemUnderTest, options)).to.throw('connectionString cannot be null');
+	  	expect(systemUnderTest.configureDatabase.bind(systemUnderTest, options)).to.throw('connectionString cannot be null');
 	});	
 	it('should throw an error when the options is null', () => {                              	    
 	    var options = null;
-	  	expect(systemUnderTest.configure.bind(systemUnderTest, options)).to.throw('options cannot be null');
+	  	expect(systemUnderTest.configureDatabase.bind(systemUnderTest, options)).to.throw('options cannot be null');
 	});	
 	it('should reject the promise when something goes wrong', (done) => {                          
 		// arrange
@@ -36,7 +36,7 @@ describe('the database',() => {
 
 		// act
 		// assert
-		systemUnderTest.configure(options).catch((error) => {
+		systemUnderTest.configureDatabase(options).catch((error) => {
 			expect(error).to.equal(somethingWentWrong);		
 			done();
 		})

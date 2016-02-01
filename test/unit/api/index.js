@@ -1,4 +1,3 @@
-import systemUnderTest from '../../../src/api';
 var controllersModule = require('../../../src/api/controllers');
 var middlewareModule = require('../../../src/api/middleware');
 
@@ -31,6 +30,7 @@ describe('The application',() => {
     var createControllers = root.sandbox.stub(controllersModule, 'createControllers').returns(routeControllers);
     
     // act
+    var systemUnderTest = require('../../../src/api').default;
     systemUnderTest.start(options); 
 
     // assert    

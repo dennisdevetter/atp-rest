@@ -28,7 +28,3 @@ export function configureDatabase(options) {
 		}
 	});
 }
-
-export default {
-	configure : configureDatabase
-}
