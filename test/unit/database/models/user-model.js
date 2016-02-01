@@ -17,6 +17,6 @@ describe('user model',() => {
 	    // todo needs some further testing
 		expect(systemUnderTest.paths['username']).to.be.ok; 
 		expect(systemUnderTest.paths['email']).to.be.ok; 
-		expect(systemUnderTest.paths['password']).to.be.ok; 
+		expect(systemUnderTest.paths['password']).to.be.ok;  
 	});
 });  

@@ -1,6 +1,6 @@
-var systemUnderTest = require('../../../src/api').default; 
-import controllers from '../../../src/api/controllers';
-import middleware from '../../../src/api/middleware';
+import systemUnderTest from '../../../src/api';
+var controllersModule = require('../../../src/api/controllers');
+var middlewareModule = require('../../../src/api/middleware');
 
 describe('The application',() => {     
   it('should start the server', () => {                            		
@@ -26,9 +26,9 @@ describe('The application',() => {
     var requestPipes = { someMiddleware : middlewareRequestHandler};
     var routeControllers = ['controller1', 'controller2'];
 
-    var createRequestPipeline = root.sandbox.stub(middleware, 'createRequestPipeline').returns(requestPipes);
-    var createApiEndpoint = root.sandbox.stub(middleware, 'createApiEndpoint').returns(apiEndpointHandler);
-    var createControllers = root.sandbox.stub(controllers, 'create').returns(routeControllers);
+    var createRequestPipeline = root.sandbox.stub(middlewareModule, 'createRequestPipeline').returns(requestPipes);
+    var createApiEndpoint = root.sandbox.stub(middlewareModule, 'createApiEndpoint').returns(apiEndpointHandler);
+    var createControllers = root.sandbox.stub(controllersModule, 'createControllers').returns(routeControllers);
     
     // act
     systemUnderTest.start(options); 

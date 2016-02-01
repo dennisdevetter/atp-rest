@@ -1,5 +1,5 @@
-import middleware from './middleware';
-import controllers from './controllers';
+import { createRequestPipeline, createApiEndpoint } from './middleware';
+import { createControllers } from './controllers';
 
 function startServer(options = {}){
 	let { app, config } = options;			
@@ -10,7 +10,7 @@ function startServer(options = {}){
 	app.set('superSecret', secret);	
 
 	// create global request pipeline middleware
-	let requestPipes = middleware.createRequestPipeline({ app });	
+	let requestPipes = createRequestPipeline({ app });	
 	Object.keys(requestPipes).forEach((key) => {
 		console.log(`applying request pipeline: ${key}`)
 		var requestPipe = requestPipes[key];		
@@ -19,10 +19,10 @@ function startServer(options = {}){
 
 	// create root http request pipeline	
 	let endpoint = `http://localhost:${port}${name}`;
-	app.get('/', middleware.createApiEndpoint(endpoint));
+	app.get('/', createApiEndpoint(endpoint));
 
 	// create the api controllers
-	controllers.create({ app }).forEach((route) => {
+	createControllers({ app }).forEach((route) => {
 		app.use(name, route);
 	});;	
 
