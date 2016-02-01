@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 import promisifyMongoose from './promisify';
 promisifyMongoose(mongoose);
 
-export function configureDatabase(options) {	
+export function configureDatabase(options) {			
 	if (!options) throw Error('options cannot be null');
 
 	let { connectionString } = options;
@@ -16,10 +16,10 @@ export function configureDatabase(options) {
 			mongoose.connect(connectionString);
 			
 			let db = mongoose.connection;
-			db.on('error', (error) => {
+			db.on('error', (error) => {				
 				reject(error);
 			}); 
-			db.once('open', () => {				
+			db.once('open', () => {								
 				resolve();
 			});
 		}
@@ -27,4 +27,8 @@ export function configureDatabase(options) {
 			reject(error);
 		}
 	});
+}
+
+export default {
+	configure : configureDatabase
 }
