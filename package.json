@@ -9,7 +9,7 @@
     "lint": "gulp lint",
     "watch": "gulp watch",
     "build": "gulp build",
-    "coverage": "gulp coverage"
+    "import": "babel-node ./src/importer"
   },
   "repository": {
     "type": "git",
@@ -23,12 +23,13 @@
   },
   "homepage": "https://github.com/dennisdevetter/atp-rest",
   "dependencies": {
-    "morgan": "~1.6.1",
+    "bluebird": "~3.1.4",
     "body-parser": "~1.14.2",
     "express": "~4.13.4",
     "jsonwebtoken": "~5.5.4",
+    "lodash": "^4.2.1",
     "mongoose": "~4.3.7",
-    "bluebird": "~3.1.4"
+    "morgan": "~1.6.1"
   },
   "devDependencies": {
     "babel-cli": "~6.4.5",
@@ -39,6 +40,7 @@
     "babel-preset-es2015": "~6.3.13",
     "babel-register": "^6.3.13",
     "chai": "^3.4.1",
+    "csvtojson": "^0.5.2",
     "del": "^2.2.0",
     "file-loader": "~0.8.5",
     "glob": "^6.0.3",

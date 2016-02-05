@@ -6,5 +6,8 @@ export default  {
 	database : {
 		connectionString: 'mongodb://localhost:27017' 
 	},
-	secret: 'ilovescotchyscotch' 
+	secret: 'ilovescotchyscotch',
+	importer: {
+		sourcePath: ''
+	}
 };
