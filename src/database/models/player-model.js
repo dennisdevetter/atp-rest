@@ -8,7 +8,7 @@ var playerSchema = new Schema({
     lastName: { type: String, required: true}, 
     hand: { type: String, required: false}, 
     birthdate: { type: Number, required: false}, 
-    country: { type: String, required: true},
+    country: { type: String, required: false},
     sex: { type: String, required: true}
 });
 
