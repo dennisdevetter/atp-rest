@@ -1,5 +1,4 @@
-import playerConverter from './player-converter';
-import PlayerModel from '../../database/models/player-model';
+import savePlayer from './save-player';
 
 const schema = [
 	'player_id', 
@@ -10,32 +9,17 @@ const schema = [
 	'country_code'
 ];
 
-const identifier = (player) => {
-	return { playerId: player.player_id };
-}
-
-const onSave = (player) => {
-	console.log(`saved player '${player.first_name} ${player.last_name}'`);
-}
-
 var atp_players = {
 	schema,
 	path: 'atp_players.csv',
-	converter:  playerConverter({sex: 'M'}),	
-	dataType: PlayerModel,	
-	identifier,
-	onSave
+	onSave : savePlayer({sex: 'M'})
 };
 
 var wta_players = {
 	schema,
 	path: 'wta_players.csv',
-	converter:  playerConverter({sex: 'F'}),	
-	dataType: PlayerModel,	
-	identifier,
-	onSave
+	onSave : savePlayer({sex: 'F'})
 };
-
 
 export default {
 	wta_players,

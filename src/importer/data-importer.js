@@ -67,9 +67,15 @@ function checkIfImportNeeded(absolutePath, taskInfo) {
 	return new Promise((resolve, reject) => {
 		// when the task failed before always execute again.
 		if (status == errorStatus) {
-			resolve();
+			resolve({ shouldImport: true });
 			return;
 		}
+		
+		if (process.argv.find((arg) => (arg && arg.toLowerCase()) == 'force')) {			
+			resolve({ shouldImport: true });
+			return;
+		}
+
 
 		// checks if the file was modified after the last task run.
 		fs.stat(absolutePath, (err, stats) => {
@@ -114,24 +120,6 @@ function doImport(options = {}, taskInfo){
 }
 
 function saveItem(options, item){  
-
-  var { dataType, identifier, converter, onSave } = options;
-
-  return dataType.findOne(identifier(item)).then((model) => {  		
-  		var isNew;
-  		if (!model){
-			 model = new dataType({});								
-			 isNew = true;
-  		}
-
-  		converter(model, item);
-
-  		var promise = model.save();
-
-  		if (onSave) {
-  			promise.then(onSave(item));
-  		}
-
-		return promise;
-  });
+  var { onSave } = options;
+  return onSave(item);
 }
