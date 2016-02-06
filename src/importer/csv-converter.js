@@ -20,10 +20,9 @@ function convertDataToJson(value, headers) {
 	});
 }
 
-export default function convert(filename, headers){
+export default function convert(filePath, headers){
 	return new Promise((resolve, reject) => {
-		try {
-			var filePath = path.join(__dirname, filename);			
+		try {				
 			fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
 			    if (!err){
 			    	convertDataToJson(data, headers).then((result) => {			    				    		

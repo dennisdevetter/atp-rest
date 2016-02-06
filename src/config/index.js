@@ -8,6 +8,6 @@ export default  {
 	},
 	secret: 'ilovescotchyscotch',
 	importer: {
-		sourcePath: ''
+		sourcePath: 'C:\\github\\atp-rest\\data\\'
 	}
 };

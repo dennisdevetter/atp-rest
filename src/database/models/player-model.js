@@ -9,7 +9,12 @@ var playerSchema = new Schema({
     hand: { type: String, required: false}, 
     birthdate: { type: Number, required: false}, 
     country: { type: String, required: false},
-    sex: { type: String, required: true}
+    sex: { type: String, required: true},
+    ranking: [ {
+    	date : { type: Number, required: true },
+    	points: { type: Number, required: false, default:0 },
+    	tours: { type: Number, required: false, default:0 }
+    } ]
 });
 
 export function getSchema(){
