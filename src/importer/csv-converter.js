@@ -3,9 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import Promise from 'bluebird';
 
-function convertDataToJson(value, headers) {
+function convertDataToJson(value, headers, firstLineContainsHeader = false) {
 	var converter = new Converter({
-		noheader:true,
+		noheader: !firstLineContainsHeader,
 		headers: headers
 	});
 
@@ -20,12 +20,12 @@ function convertDataToJson(value, headers) {
 	});
 }
 
-export default function convert(filePath, headers){
+export default function convert(filePath, headers, firstLineContainsHeader){
 	return new Promise((resolve, reject) => {
 		try {				
 			fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
 			    if (!err){
-			    	convertDataToJson(data, headers).then((result) => {			    				    		
+			    	convertDataToJson(data, headers, firstLineContainsHeader).then((result) => {			    				    		
 						resolve(result);
 			    	}).catch((err) => {
 			    		reject(err);

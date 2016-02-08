@@ -1,9 +1,11 @@
 import playersConfig from './players';
 import rankingsConfig from './rankings';
+import matchesConfig from './matches';
 
 var importerConfiguration = Object.assign({}, 
 	playersConfig,
-	rankingsConfig
+	rankingsConfig,
+	matchesConfig
 );
 
 export default importerConfiguration;

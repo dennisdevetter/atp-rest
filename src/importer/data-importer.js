@@ -27,13 +27,13 @@ function createTask(configuration) {
 }
 
 function convertFileToJsonAndSaveToDatabase(options) {
-	var { path, schema } = options;	
+	var { path, schema, firstLineContainsHeader = false } = options;	
 	var absolutePath = getAbsolutePathFromFileName(path);
 	var failed = 0, succeeded = 0;		
 	console.log(`importing path ${absolutePath}...`);			
 	
 	return new Promise((resolve, reject) => {
-		convertCsvToJson(absolutePath, schema).then((items) => {		
+		convertCsvToJson(absolutePath, schema, firstLineContainsHeader).then((items) => {		
 			function resolveIfFinished(){
 				if (succeeded + failed == items.length) {
 					console.log('import done.');
