@@ -65,6 +65,23 @@ function resolveTargetFiles(configurations) {
 	});
 }
 
+function getContentsOfFolder(path) {
+	var cache = {};
+	return new Promise((resolve, reject) => {
+		var contents = cache[path];
+		if (contents){
+			resolve(contents);
+			return;
+		}
+
+		fs.readdir(path, (err, files) => {
+			cache[path] = files;
+			resolve(files);
+		});
+	});
+}
+
+
 // =====================================================================================
 // based on the path of the configuration parameter, returns an object 
 // with file matches (absolute paths) and the import configuration
@@ -78,8 +95,7 @@ function getFileMatches(configuration) {
 		var filePath = dataFolder + path;
 
 		try {
-			// TODO: the content of the directory can be cached.... ! 
-			fs.readdir(dataFolder, (err, files) => {				
+			getContentsOfFolder(dataFolder).then((files) => {
 				var matches = files.filter((file) => file.match(path)).sort().reverse();
 
 				// return the absolute paths to the files.
@@ -92,7 +108,7 @@ function getFileMatches(configuration) {
 					filePaths,
 					configuration
 				});
-			});	
+			});			
 		}
 		catch (error) {
 			reject(error);
