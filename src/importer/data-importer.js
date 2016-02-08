@@ -4,46 +4,156 @@ import config from '../config';
 import Promise from 'bluebird';
 import fs from 'fs';	
 
-export default function importer(configuration){	
-	return taskRunner.startTask( {
-		taskId: 'importfiles',
-		task: createTask(configuration)
+
+// =======================================================================================
+// Start the importer based on its configuration
+// =======================================================================================
+export default function importer(configurations) {		
+
+	resolveTargetFiles(configurations).then(startImport);
+}
+
+// =======================================================================================
+// Executes the import task
+// =======================================================================================
+function startImport(targetFiles) {	
+	if (targetFiles) {
+		var task = {
+			taskId: 'importfiles',
+			task : handleAllTargetFiles(targetFiles)
+		};
+
+		taskRunner.startTask(task);
+	}	
+}
+
+// =======================================================================================
+// based on the configurations returns an array of file matches and import configurations
+// =======================================================================================
+function resolveTargetFiles(configurations) {
+	
+	return new Promise((resolve, reject) => {
+		var keys = Object.keys(configurations);
+		var targetFiles = [];
+		var index = 0;
+
+		function resolveIfFinished() {
+			index++;	
+			if (index == keys.length) {
+				resolve(targetFiles);			
+			}
+		};
+
+		try {
+			
+			var promises = [];
+			keys.forEach((key) => {
+				var configuration	= configurations[key];								
+				getFileMatches(configuration).then((result) => {										
+					targetFiles.push(result);
+					resolveIfFinished();		
+					
+				}).catch((error) => {
+					resolveIfFinished();
+				});
+				
+			});							
+		}
+		catch(error) {
+			reject(error);
+		}
 	});
 }
 
-function createTask(configuration) {
-	return (taskInfo) => {		
-		var keys = Object.keys(configuration);
+// =====================================================================================
+// based on the path of the configuration parameter, returns an object 
+// with file matches (absolute paths) and the import configuration
+// =====================================================================================
+function getFileMatches(configuration) {
 
-		var lastPromise = keys.reduce((promise, key) => {		
+	var { path } = configuration;
+
+	return new Promise((resolve, reject) => {
+		var dataFolder = getDataFolder();
+		var filePath = dataFolder + path;
+
+		try {
+			// TODO: the content of the directory can be cached.... ! 
+			fs.readdir(dataFolder, (err, files) => {				
+				var matches = files.filter((file) => file.match(path)).sort().reverse();
+
+				// return the absolute paths to the files.
+				var filePaths = [];
+				matches.forEach((match) => {
+					filePaths.push(dataFolder + match);
+				});
+
+				resolve({
+					filePaths,
+					configuration
+				});
+			});	
+		}
+		catch (error) {
+			reject(error);
+		}
+	})
+}
+
+// =======================================================================================
+// handles the import for all the resolved target files and its configurations
+// =======================================================================================
+function handleAllTargetFiles(targetFiles){
+
+	// the task info is given by the task runner on each run.
+	// it gives information about tasks run in history.
+	return (taskInfo) => {
+		var lastPromise = targetFiles.reduce((promise, target) => {					
 			return promise.then(() => {			
-				var options = configuration[key];
-				return doImport(options, taskInfo);
+				return handleTargetFile(target.filePaths, target.configuration, taskInfo);
 			});
 		}, Promise.resolve());
 
 		return lastPromise;
-	}
+	};
 }
 
-function convertFileToJsonAndSaveToDatabase(options) {
-	var { path, schema, firstLineContainsHeader = false } = options;	
-	var absolutePath = getAbsolutePathFromFileName(path);
+// =======================================================================================
+// handles the import for all resolved files using the import configuration
+// =======================================================================================
+function handleTargetFile(filePaths, configuration, taskInfo) {
+	var lastPromise = filePaths.reduce((promise, filePath) => {					
+		return promise.then(() => {			
+			return doImport(filePath, configuration, taskInfo);
+		});
+	}, Promise.resolve());
+
+	return lastPromise;
+}
+
+
+// =====================================================================================
+// Reads the file as a JSON object and saves the data to the database
+// =====================================================================================
+function convertFileToJsonAndSaveToDatabase(filePath, configuration	) {
+	var { schema, firstLineContainsHeader = false, onSave } = configuration	;		
 	var failed = 0, succeeded = 0;		
-	console.log(`importing path ${absolutePath}...`);			
+	console.log(`importing file ${filePath}...`);			
 	
 	return new Promise((resolve, reject) => {
-		convertCsvToJson(absolutePath, schema, firstLineContainsHeader).then((items) => {		
+		convertCsvToJson(filePath, schema, firstLineContainsHeader).then((items) => {		
 			function resolveIfFinished(){
 				if (succeeded + failed == items.length) {
 					console.log('import done.');
+					// todo: add the success and failed count for the individual items
+					// so that it can be taken into account for the task runner
 					resolve();
 				}
 			}
 
-			if (items && items.length) {						
-				items.forEach((item) => {
-					saveItem(options, item).then(() => {
+			if (items && items.length) {					
+				items.forEach((item) => {					
+					onSave(item).then(() => {
 						succeeded++;
 						resolveIfFinished();
 					}).catch((error) => {
@@ -59,7 +169,11 @@ function convertFileToJsonAndSaveToDatabase(options) {
 	});
 }
 
-function checkIfImportNeeded(absolutePath, taskInfo) {
+// =====================================================================================
+// Based on the modification date or previous task runner determine 
+// If an import is needed for the given file
+// =====================================================================================
+function checkIfImportNeeded(filePath, taskInfo) {
 	var { lastExecutedOn, status } = taskInfo;
 
 	var errorStatus = 2;
@@ -78,7 +192,7 @@ function checkIfImportNeeded(absolutePath, taskInfo) {
 
 
 		// checks if the file was modified after the last task run.
-		fs.stat(absolutePath, (err, stats) => {
+		fs.stat(filePath, (err, stats) => {
 			if (!err) {
 				var lastModifiedDate = stats.mtime;
 				var isFileModifiedAfterLastSync = lastModifiedDate > lastExecutedOn;
@@ -90,25 +204,27 @@ function checkIfImportNeeded(absolutePath, taskInfo) {
 	});
 }
 
-function getAbsolutePathFromFileName(filename) {
-	// TODO: handle wildcards ?
-	var absolutePath = config.importer.sourcePath + filename;
-	return absolutePath;
+// =====================================================================================
+// returns the source folder (absolute path) where the data files are located
+// =====================================================================================
+function getDataFolder() {
+	return config.importer.sourcePath;
 }
 
-function doImport(options = {}, taskInfo){	
-	
-	var { path } = options;	
+// =====================================================================================
+// Import the data for a given file ands its import configuration
+// =====================================================================================
+function doImport(filePath, configuration, taskInfo){	
+		
 	var { lastExecutedOn, status } = taskInfo;	
-	var absolutePath = getAbsolutePathFromFileName(path);
 
 	return new Promise((resolve, reject) => {		
 		try {				
-			checkIfImportNeeded(absolutePath, taskInfo).then(({shouldImport}) => {
-				if (shouldImport) {
-					convertFileToJsonAndSaveToDatabase(options).then(resolve);					
+			checkIfImportNeeded(filePath, taskInfo).then(({shouldImport}) => {
+				if (shouldImport) {					
+					convertFileToJsonAndSaveToDatabase(filePath, configuration).then(resolve);					
 				} else {
-					console.log(`skipping file ${path} because it hasnt been modified`);
+					console.log(`skipping file ${filePath} because it hasnt been modified`);
 					resolve();	
 				}
 			})			
@@ -117,9 +233,4 @@ function doImport(options = {}, taskInfo){
 			reject(error);
 		}		
 	});	
-}
-
-function saveItem(options, item){  
-  var { onSave } = options;
-  return onSave(item);
 }

@@ -52,21 +52,13 @@ const schema = [
 	'l_bpFaced'
 ];
 
-var atp_matches = {
+var matches = {
 	schema,
-	path: 'atp_matches_2016.csv',
-	onSave : saveMatches,
-	firstLineContainsHeader : true
-};
-
-var wta_matches = {
-	schema,
-	path: 'wta_matches_2016.csv',
+	path: '(atp|wta)_matches_\\d{4}.csv',
 	onSave : saveMatches,
 	firstLineContainsHeader : true
 };
 
 export default {
-	wta_matches,
-	atp_matches
+	matches
 }

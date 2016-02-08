@@ -5,7 +5,7 @@ import matchesConfig from './matches';
 var importerConfiguration = Object.assign({}, 
 	playersConfig,
 	rankingsConfig,
-	matchesConfig
+	matchesConfig	
 );
 
 export default importerConfiguration;
