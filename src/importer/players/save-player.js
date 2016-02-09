@@ -2,21 +2,23 @@ import PlayerModel from '../../database/models/player-model';
 
 const savePlayer = (options) => (jsonPlayer)  => {
 
+	var { sex } = options;
+
 	return PlayerModel.findOne({ playerId: jsonPlayer.player_id }).then((model) => {
-		if (!model){
-			model = new PlayerModel({});
+		if (model){
+			return;
 		}
-		
-		var { sex } = options;
 
-		model.playerId = jsonPlayer.player_id;
-		model.firstName =jsonPlayer.first_name;
-		model.lastName =jsonPlayer.last_name;
-		model.hand = jsonPlayer.hand;
-		model.birthdate = jsonPlayer.birth_date;
-		model.country = jsonPlayer.country_code;
-		model.sex = sex;
-
+		model = new PlayerModel({
+			playerId : jsonPlayer.player_id,
+			firstName: jsonPlayer.first_name,
+			lastName: jsonPlayer.last_name,
+			hand : jsonPlayer.hand,
+			birthdate : jsonPlayer.birth_date,
+			country : jsonPlayer.country_code,
+			sex: sex
+		});
+								
 		return model.save().then(() => {
 			console.log(`saved player '${jsonPlayer.first_name} ${jsonPlayer.last_name}'`);
 		});

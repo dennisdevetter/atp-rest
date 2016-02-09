@@ -4,12 +4,10 @@ import config from '../config';
 import Promise from 'bluebird';
 import fs from 'fs';	
 
-
 // =======================================================================================
 // Start the importer based on its configuration
 // =======================================================================================
 export default function importer(configurations) {		
-
 	resolveTargetFiles(configurations).then(startImport);
 }
 
@@ -17,25 +15,25 @@ export default function importer(configurations) {
 // Executes the import task
 // =======================================================================================
 function startImport(targetFiles) {	
-	if (targetFiles) {
-		var task = {
-			taskId: 'importfiles',
-			task : handleAllTargetFiles(targetFiles)
-		};
+	if (!targetFiles) {
+		console.log('nothing to import');
+		return;
+	}
 
-		taskRunner.startTask(task);
-	}	
+	var task = {
+		taskId: 'importfiles',
+		task : handleAllTargetFiles(targetFiles)
+	};
+
+	taskRunner.startTask(task);
 }
 
-// =======================================================================================
-// based on the configurations returns an array of file matches and import configurations
-// =======================================================================================
-function resolveTargetFiles(configurations) {
-	
+// ==========================================================================================
+// based on the configurations returns an array of file matches and its import configuration
+// ==========================================================================================
+function resolveTargetFiles(configurations) {	
 	return new Promise((resolve, reject) => {
-		var keys = Object.keys(configurations);
-		var targetFiles = [];
-		var index = 0;
+		var keys = Object.keys(configurations), targetFiles = [], index = 0;
 
 		function resolveIfFinished() {
 			index++;	
@@ -44,13 +42,12 @@ function resolveTargetFiles(configurations) {
 			}
 		};
 
-		try {
-			
-			var promises = [];
+		try {						
 			keys.forEach((key) => {
-				var configuration	= configurations[key];								
+				var configuration = configurations[key];								
+
 				getFileMatches(configuration).then((result) => {										
-					targetFiles.push(result);
+					result && targetFiles.push(result);	
 					resolveIfFinished();		
 					
 				}).catch((error) => {
@@ -65,6 +62,9 @@ function resolveTargetFiles(configurations) {
 	});
 }
 
+// =====================================================================================
+// Retrieves the file contents of a directory, and caches the result
+// =====================================================================================
 function getContentsOfFolder(path) {
 	var cache = {};
 	return new Promise((resolve, reject) => {
@@ -74,13 +74,16 @@ function getContentsOfFolder(path) {
 			return;
 		}
 
+		// reads the directory content
 		fs.readdir(path, (err, files) => {
+			if (err) {
+				throw Error(err);
+			}
 			cache[path] = files;
 			resolve(files);
 		});
 	});
 }
-
 
 // =====================================================================================
 // based on the path of the configuration parameter, returns an object 
@@ -126,7 +129,7 @@ function handleAllTargetFiles(targetFiles){
 	return (taskInfo) => {
 		var lastPromise = targetFiles.reduce((promise, target) => {					
 			return promise.then(() => {			
-				return handleTargetFile(target.filePaths, target.configuration, taskInfo);
+				return handleTargetFile(target, taskInfo);
 			});
 		}, Promise.resolve());
 
@@ -137,7 +140,9 @@ function handleAllTargetFiles(targetFiles){
 // =======================================================================================
 // handles the import for all resolved files using the import configuration
 // =======================================================================================
-function handleTargetFile(filePaths, configuration, taskInfo) {
+function handleTargetFile(targetFile, taskInfo) {
+	var { filePaths, configuration } = targetFile;
+
 	var lastPromise = filePaths.reduce((promise, filePath) => {					
 		return promise.then(() => {			
 			return doImport(filePath, configuration, taskInfo);
