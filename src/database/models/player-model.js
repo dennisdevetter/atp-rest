@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema
 
 var playerSchema = new Schema({ 
     playerId: { type: Number, required: true}, 
@@ -15,11 +15,11 @@ var playerSchema = new Schema({
     	points: { type: Number, required: false, default:0 },
     	tours: { type: Number, required: false, default:0 }
     } ]
-});
+})
 
 export function getSchema(){
-	return playerSchema;
+	return playerSchema
 }
 
-export default mongoose.model('Player', playerSchema);
+export default mongoose.model('Player', playerSchema)
 

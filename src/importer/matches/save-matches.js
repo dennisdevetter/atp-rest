@@ -1,15 +1,15 @@
-import MatchModel from '../../database/models/match-model';
+import MatchModel from '../../database/models/match-model'
 
 const saveMatch = (jsonMatch)  => {
 
 	var filter = { 
 		tourneyId: jsonMatch.tourney_id, 
 		match: jsonMatch.match_num 
-	};
+	}
 
 	return MatchModel.findOne(filter).then((model) => {
 			if (model){
-				return;	
+				return	
 			}
 
 			model = new MatchModel({
@@ -46,12 +46,12 @@ const saveMatch = (jsonMatch)  => {
 				lSvGms: jsonMatch.l_SvGms,
 				lBpSaved: jsonMatch.l_bpSaved,
 				lBpFaced: jsonMatch.l_bpFaced
-			});
+			})
 						
 			return model.save().then(() => {
-				console.log(`saved match '${jsonMatch.tourney_id} ${jsonMatch.match_num}'`);
-			});
-		});  		
+				console.log(`saved match '${jsonMatch.tourney_id} ${jsonMatch.match_num}'`)
+			})
+		})  		
 }
 
-export default saveMatch;
+export default saveMatch

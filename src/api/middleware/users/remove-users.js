@@ -1,10 +1,10 @@
-import services from '../../services';
+import services from '../../services'
 
 export default function removeUsers(req, res, next) {
-	let users = {};	
+	let users = {}	
 	services.userService.remove(users).then((result) => {					
-			res.send({message: 'users removed'});
-		}).catch((error) => {
-			res.send({message: 'failed to remove users'});
-		});		
+		res.send({message: 'users removed'})
+	}).catch((error) => {
+		res.send({message: 'failed to remove users'})
+	})		
 }

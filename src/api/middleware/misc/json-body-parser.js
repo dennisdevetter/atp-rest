@@ -1,5 +1,5 @@
-import bodyParser from 'body-parser';
+import bodyParser from 'body-parser'
 
 export default function(options) {
-	return bodyParser.json();
+	return bodyParser.json()
 }

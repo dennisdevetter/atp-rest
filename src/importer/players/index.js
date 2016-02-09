@@ -1,4 +1,4 @@
-import savePlayer from './save-player';
+import savePlayer from './save-player'
 
 const schema = [
 	'player_id', 
@@ -7,19 +7,19 @@ const schema = [
 	'hand', 
 	'birth_date', 
 	'country_code'
-];
+]
 
 var atp_players = {
 	schema,
 	path: 'atp_players.csv',
 	onSave : savePlayer({sex: 'M'})
-};
+}
 
 var wta_players = {
 	schema,
 	path: 'wta_players.csv',
 	onSave : savePlayer({sex: 'F'})
-};
+}
 
 export default {
 	wta_players,

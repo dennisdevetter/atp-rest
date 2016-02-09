@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema
 
 var matchSchema = new Schema({ 
     tourneyId: { type: String, required: true}, 
@@ -36,11 +36,11 @@ var matchSchema = new Schema({
     lSvGms: { type: Number, required: false}, 
     lBpSaved: { type: Number, required: false}, 
     lBpFaced: { type: Number, required: false} 
-});
+})
 
 export function getSchema(){
-    return matchSchema;
+    return matchSchema
 }
 
-export default mongoose.model('Match', matchSchema);
+export default mongoose.model('Match', matchSchema)
 

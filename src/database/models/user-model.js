@@ -1,16 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema
 
 var userSchema = new Schema({ 
     username: String, 
     email : String,
     password: String    
-});
+})
 
 export function getSchema(){
-	return userSchema;
+	return userSchema
 }
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema)
 

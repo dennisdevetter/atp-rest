@@ -1,5 +1,5 @@
-import bodyParser from 'body-parser';
+import bodyParser from 'body-parser'
 
 export default function createEncodedBodyParser(options) {
-	return bodyParser.urlencoded({ extended: false });
+	return bodyParser.urlencoded({ extended: false })
 } 

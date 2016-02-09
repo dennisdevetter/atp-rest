@@ -1,4 +1,4 @@
-import listPlayers from './list-players';
+import listPlayers from './list-players'
 
 export {
 	listPlayers

@@ -1,7 +1,7 @@
-import home from './home';
-import users from './users';
-import players from './players';
-import auth from './auth';
+import home from './home'
+import users from './users'
+import players from './players'
+import auth from './auth'
 
 export function createControllers(options) {
 	return [
@@ -9,7 +9,7 @@ export function createControllers(options) {
 		users(options),
 		players(options),
 		auth(options)	
-	];
+	]
 }
 	
 

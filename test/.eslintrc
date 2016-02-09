@@ -4,7 +4,8 @@
   "rules": {
     "strict": 0,
     "quotes": [2, "single"],
-    "no-unused-expressions": 0
+    "no-unused-expressions": 0,
+    "semi": [2, "never"]
   },
   "env": {
     "browser": true,

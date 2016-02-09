@@ -1,25 +1,25 @@
-import express from 'express';
-import { decodeToken as createAuthorizeRequest } from '../middleware/auth';
-import { normalizeSaveRequest, listUsers, removeUsers, saveUsers} from '../middleware/users';
+import express from 'express'
+import { decodeToken as createAuthorizeRequest } from '../middleware/auth'
+import { normalizeSaveRequest, listUsers, removeUsers, saveUsers} from '../middleware/users'
 
 export default function createController(options) {
-	var router = express.Router();
-	var authorize = createAuthorizeRequest(options);
+	var router = express.Router()
+	var authorize = createAuthorizeRequest(options)
 
-	let routeName = '/users';
+	let routeName = '/users'
 
 	router.route(routeName)
 		.get(authorize)
-		.get(listUsers);
+		.get(listUsers)
 
 	router.route(routeName)
 		.post(authorize)
 		.post(normalizeSaveRequest)
-		.post(saveUsers);
+		.post(saveUsers)
 
 	router.route(routeName)		
 		.delete(authorize)
-		.delete(removeUsers);
+		.delete(removeUsers)
 
-    return router;
+    return router
 }

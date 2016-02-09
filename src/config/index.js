@@ -10,4 +10,4 @@ export default  {
 	importer: {
 		sourcePath: 'C:\\github\\atp-rest\\data\\'
 	}
-};
+}

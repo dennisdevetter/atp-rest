@@ -1,12 +1,12 @@
-import PlayerModel from '../../database/models/player-model';
+import PlayerModel from '../../database/models/player-model'
 
 const savePlayer = (options) => (jsonPlayer)  => {
 
-	var { sex } = options;
+	var { sex } = options
 
 	return PlayerModel.findOne({ playerId: jsonPlayer.player_id }).then((model) => {
 		if (model){
-			return;
+			return
 		}
 
 		model = new PlayerModel({
@@ -17,12 +17,12 @@ const savePlayer = (options) => (jsonPlayer)  => {
 			birthdate : jsonPlayer.birth_date,
 			country : jsonPlayer.country_code,
 			sex: sex
-		});
+		})
 								
 		return model.save().then(() => {
-			console.log(`saved player '${jsonPlayer.first_name} ${jsonPlayer.last_name}'`);
-		});
-	});  		
+			console.log(`saved player '${jsonPlayer.first_name} ${jsonPlayer.last_name}'`)
+		})
+	})  		
 }
 
-export default savePlayer;
+export default savePlayer

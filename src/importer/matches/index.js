@@ -1,4 +1,4 @@
-import saveMatches from './save-matches';
+import saveMatches from './save-matches'
 
 const schema = [
 	'tourney_id',
@@ -50,14 +50,14 @@ const schema = [
 	'l_SvGms',
 	'l_bpSaved',
 	'l_bpFaced'
-];
+]
 
 var matches = {
 	schema,
 	path: '(atp|wta)_matches_\\d{4}.csv',
 	onSave : saveMatches,
 	firstLineContainsHeader : true
-};
+}
 
 export default {
 	matches

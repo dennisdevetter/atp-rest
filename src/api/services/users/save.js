@@ -1,14 +1,14 @@
-import UserModel from '../../../database/models/user-model';
-import Promise from 'bluebird';
+import UserModel from '../../../database/models/user-model'
+import Promise from 'bluebird'
 
 export default function save(users = []){
 
-	var requests  = [];
-	var succeeded = [];
-	var failed = [];
+	var requests  = []
+	var succeeded = []
+	var failed = []
 
 	users.forEach((user) => {
-		let { username, email, password } = user;
+		let { username, email, password } = user
 
 		// todo.. check if user already exists.. if so throw error.
 		
@@ -16,17 +16,17 @@ export default function save(users = []){
 			username: username, 
 			email: email,
 			password: password	    
-		});
+		})
 		
-		requests.push(userModel.save());
+		requests.push(userModel.save())
 		userModel.save().then((response) => {
 			// todo check for failed or success
-			succeeded.push(response);				
+			succeeded.push(response)				
 		})	
-	});
+	})
 
 	return Promise.all(requests).then((response) => {						
 		// todo convert the entities (update id's for new users)
-		return succeeded;
-	});
+		return succeeded
+	})
 }

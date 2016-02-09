@@ -1,4 +1,4 @@
-import welcomeRequest from './welcome';
+import welcomeRequest from './welcome'
 
 export {
 	welcomeRequest

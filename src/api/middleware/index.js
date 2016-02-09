@@ -1,4 +1,4 @@
-import { encodedBodyParser, jsonBodyParser, requestLogger, indexHttpRequest} from './misc';
+import { encodedBodyParser, jsonBodyParser, requestLogger, indexHttpRequest} from './misc'
 
 export function createRequestPipeline(options) {
 	return {
@@ -9,5 +9,5 @@ export function createRequestPipeline(options) {
 }
 
 export function createApiEndpoint(endpoint) {	
-	return indexHttpRequest(endpoint);	
+	return indexHttpRequest(endpoint)	
 }
