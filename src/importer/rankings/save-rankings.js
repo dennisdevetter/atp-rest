@@ -2,7 +2,7 @@ import PlayerModel from '../../database/models/player-model'
 
 const saveRankings = (json)  => {
 	
-	return PlayerModel.findOne({ playerId: json.player_id }).then((model) => {
+	return PlayerModel.findOne({ playerId: json.player_id }).then((model) => {		
 		if (!model) return		
 
 		if (!model.ranking) {
