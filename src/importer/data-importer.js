@@ -156,37 +156,53 @@ function handleTargetFile(targetFile, taskInfo) {
 // =====================================================================================
 // Reads the file as a JSON object and saves the data to the database
 // =====================================================================================
-function convertFileToJsonAndSaveToDatabase(filePath, configuration	) {
-	var { schema, firstLineContainsHeader = false, onSave } = configuration	;		
-	var failed = 0, succeeded = 0;		
+function convertFileToJson(filePath, configuration) {
+	var { schema, firstLineContainsHeader = false } = configuration	;			
 	console.log(`importing file ${filePath}...`);			
 	
 	return new Promise((resolve, reject) => {
 		convertCsvToJson(filePath, schema, firstLineContainsHeader).then((items) => {		
-			function resolveIfFinished(){
-				if (succeeded + failed == items.length) {
-					console.log('import done.');
-					// todo: add the success and failed count for the individual items
-					// so that it can be taken into account for the task runner
-					resolve();
-				}
-			}
-
-			if (items && items.length) {					
-				items.forEach((item) => {					
-					onSave(item).then(() => {
-						succeeded++;
-						resolveIfFinished();
-					}).catch((error) => {
-						console.log('failed to save. error:' + error);
-						failed++;
-						resolveIfFinished();
-					});						
-				});								
-			}							
+			resolve(items);							
 		}).catch((error) => {
 			reject(error);
 		});		
+	});
+}
+
+// =====================================================================================
+// Saves the json data to the database
+// =====================================================================================
+function saveToDatabase(items, options) {
+	var { onSave } = options;
+	var failed = 0, succeeded = 0;		
+
+	return new Promise((resolve, reject) => {
+		if (!onSave) {
+			reject('onSave is not defined');
+			return;
+		}
+
+		function resolveIfFinished(){
+			if (succeeded + failed == items.length) {
+				console.log('import done.');
+				// todo: add the success and failed count for the individual items
+				// so that it can be taken into account for the task runner
+				resolve();
+			}
+		}
+
+		if (items && items.length) {					
+			items.forEach((item) => {					
+				onSave(item).then(() => {
+					succeeded++;
+					resolveIfFinished();
+				}).catch((error) => {
+					console.log('failed to save. error:' + error);
+					failed++;
+					resolveIfFinished();
+				});						
+			});								
+		}
 	});
 }
 
@@ -243,7 +259,9 @@ function doImport(filePath, configuration, taskInfo){
 		try {				
 			checkIfImportNeeded(filePath, taskInfo).then(({shouldImport}) => {
 				if (shouldImport) {					
-					convertFileToJsonAndSaveToDatabase(filePath, configuration).then(resolve);					
+					convertFileToJson(filePath, configuration)
+						.then((json) => saveToDatabase(json, configuration))
+						.then(resolve);					
 				} else {
 					console.log(`skipping file ${filePath} because it hasnt been modified`);
 					resolve();	
