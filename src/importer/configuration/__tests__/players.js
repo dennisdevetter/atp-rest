@@ -1,14 +1,5 @@
 import sut_players from '../players'
 
-const expectedSchema = [
-  'player_id', 
-  'first_name', 
-  'last_name', 
-  'hand', 
-  'birth_date', 
-  'country_code'
-]
-
 describe('importer players configuration', () => {  
   	it ('should not be null', () => {
   		expect(sut_players).to.not.be.empty
@@ -34,3 +25,12 @@ describe('importer players configuration', () => {
     	expect(rankings.onSave).to.not.be.empty
     })  
 })
+
+const expectedSchema = [
+  'player_id', 
+  'first_name', 
+  'last_name', 
+  'hand', 
+  'birth_date', 
+  'country_code'
+]

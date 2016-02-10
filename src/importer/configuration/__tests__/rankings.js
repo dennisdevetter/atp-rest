@@ -1,13 +1,5 @@
 import sut_rankings from '../rankings'
 
-const expectedSchema = [
-	'ranking_date', 
-	'ranking', 
-	'player_id', 
-	'ranking_points', 
-	'tours'	
-]
-
 describe('importer rankings configuration', () => {
   	it ('should not be null', () => {
   		expect(sut_rankings).to.not.be.empty
@@ -33,3 +25,11 @@ describe('importer rankings configuration', () => {
     	expect(rankings.onSave).to.not.be.empty
     })  
 })
+
+const expectedSchema = [
+  'ranking_date', 
+  'ranking', 
+  'player_id', 
+  'ranking_points', 
+  'tours' 
+]
