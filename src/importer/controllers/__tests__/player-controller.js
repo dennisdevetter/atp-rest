@@ -1,5 +1,5 @@
 import PlayerModel from '../../../database/models/player-model'
-import controller from '../controller'
+import controller from '../player-controller'
 import Promise from 'bluebird'
 
 describe('importer players controller', () => {
@@ -8,7 +8,6 @@ describe('importer players controller', () => {
 
   	it ('should not save when the player is already found', () => {
 
-      // arrange
       var options = { sex: 'M'}
       var playerModel = { playerId: '123456', save: sinon.spy() }
       var playerWasFound = new Promise((resolve, reject) => resolve(playerModel))          
@@ -16,33 +15,26 @@ describe('importer players controller', () => {
       var jsonPlayer = createJsonPlayer(options)
       var findPlayerQuery = { playerId: jsonPlayer.player_id }
 
-      //act
       sut_savePlayer(options)(jsonPlayer)
 
-      //assert
       expect(findPlayer).to.have.been.calledWith(findPlayerQuery)      
       expect(playerModel.save).to.not.have.been.called
   	})   
 
     it ('should save when the player is not found', (done) => {
 
-      // arrange
       var options = { sex: 'M' }      
       var playerWasNotFound = new Promise((resolve, reject) => resolve(null))          
       var findPlayer = root.sandbox.stub(PlayerModel, 'findOne').returns(playerWasNotFound)        
       var playerModel = { save : () => new Promise((resolve, reject) => resolve()) }
       var createModel = sinon.stub(PlayerModel, 'create').returns(playerModel)      
-      var saveThePlayer = sinon.spy(playerModel, 'save')
-                   
+      var saveThePlayer = sinon.spy(playerModel, 'save')                  
       var jsonPlayer = createJsonPlayer(options)
       var newPlayerModel = createPlayerModel(jsonPlayer)
       var findPlayerQuery = { playerId: jsonPlayer.player_id }
       
-      
-      //act
       sut_savePlayer(options)(jsonPlayer)
 
-      //assert
       expect(findPlayer).to.have.been.calledWith(findPlayerQuery)    
       playerModel.save().then(() => {
           expect(saveThePlayer).to.have.been.called       

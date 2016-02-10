@@ -42,5 +42,8 @@ export function getSchema(){
     return matchSchema
 }
 
-export default mongoose.model('Match', matchSchema)
+var MatchModel = mongoose.model('Match', matchSchema)
+export default MatchModel
+
+MatchModel.create = (data) => new MatchModel(data)
 

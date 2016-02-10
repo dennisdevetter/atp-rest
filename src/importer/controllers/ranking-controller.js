@@ -20,9 +20,7 @@ const saveRankings = (json)  => {
 			tours : json.tours
 		})
 
-		return model.save().then(() => {
-			console.log(`saved ranking for player ${model.lastName} ${model.firstName} and date ${json.ranking_date} and points ${json.ranking_points}`)
-		})
+		return model.save()
 	})  		
 }
 

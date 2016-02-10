@@ -21,10 +21,8 @@ export function getSchema(){
 	return playerSchema
 }
 
-export function create(data) {
-    return new PlayerModel(data)
-}
-
 var PlayerModel = mongoose.model('Player', playerSchema)
 export default PlayerModel
+
+PlayerModel.create = (data) => new PlayerModel(data)
 

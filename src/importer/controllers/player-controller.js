@@ -18,10 +18,8 @@ const savePlayer = (options) => (jsonPlayer) => {
 			country : jsonPlayer.country_code,
 			sex: sex
 		})
-								
-		return model.save().then(() => {
-			console.log(`saved player '${jsonPlayer.first_name} ${jsonPlayer.last_name}'`)
-		})
+										
+		return model.save()
 	})  		
 }
 

@@ -12,7 +12,6 @@ function startServer(options = {}){
 	// create global request pipeline middleware
 	let requestPipes = createRequestPipeline({ app })	
 	Object.keys(requestPipes).forEach((key) => {
-		console.log(`applying request pipeline: ${key}`)
 		var requestPipe = requestPipes[key]		
 		app.use(requestPipe)
 	})
@@ -27,8 +26,7 @@ function startServer(options = {}){
 	})	
 
 	// // starts the server
-	app.listen(port)
-	console.log(`REST API has been started at ${endpoint}`)
+	app.listen(port)	
 }
 
 export default {

@@ -1,4 +1,4 @@
-import systemUnderTest from '../index'
+import sut_players from '../players'
 
 const expectedSchema = [
   'player_id', 
@@ -9,17 +9,17 @@ const expectedSchema = [
   'country_code'
 ]
 
-describe('importer players', () => {  
+describe('importer players configuration', () => {  
   	it ('should not be null', () => {
-  		expect(systemUnderTest).to.not.be.empty
+  		expect(sut_players).to.not.be.empty
   	})
 
     it('should have 2 values', () => {    
-      expect(Object.keys(systemUnderTest).length).to.equal(2)
+      expect(Object.keys(sut_players).length).to.equal(2)
     })
 
     it('should have atp players', () => {        
-    	var rankings = systemUnderTest['atp_players']
+    	var rankings = sut_players['atp_players']
     	expect(rankings).to.not.be.empty
     	expect(rankings.schema).to.deep.equal(expectedSchema)
     	expect(rankings.path).to.equal('atp_players.csv')
@@ -27,7 +27,7 @@ describe('importer players', () => {
     })
 
       it('should have wta players', () => {        
-    	var rankings = systemUnderTest['wta_players']
+    	var rankings = sut_players['wta_players']
     	expect(rankings).to.not.be.empty
     	expect(rankings.schema).to.deep.equal(expectedSchema)
     	expect(rankings.path).to.equal('wta_players.csv')

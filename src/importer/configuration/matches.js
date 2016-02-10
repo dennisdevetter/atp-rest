@@ -1,4 +1,4 @@
-import saveMatches from './save-matches'
+import matchController from '../controllers/match-controller'
 
 const schema = [
 	'tourney_id',
@@ -55,7 +55,7 @@ const schema = [
 var matches = {
 	schema,
 	path: '(atp|wta)_matches_\\d{4}.csv',
-	onSave : saveMatches,
+	onSave : matchController.save,
 	firstLineContainsHeader : true
 }
 

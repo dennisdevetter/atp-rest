@@ -1,4 +1,4 @@
-import systemUnderTest from '../index'
+import sut_rankings from '../rankings'
 
 const expectedSchema = [
 	'ranking_date', 
@@ -8,17 +8,17 @@ const expectedSchema = [
 	'tours'	
 ]
 
-describe('importer rankings', () => {
+describe('importer rankings configuration', () => {
   	it ('should not be null', () => {
-  		expect(systemUnderTest).to.not.be.empty
+  		expect(sut_rankings).to.not.be.empty
   	})
 
     it('should have 2 values', () => {    
-      expect(Object.keys(systemUnderTest).length).to.equal(2)
+      expect(Object.keys(sut_rankings).length).to.equal(2)
     })
 
     it('should have atp player rankings', () => {        
-    	var rankings = systemUnderTest['atp_player_rankings']
+    	var rankings = sut_rankings['atp_player_rankings']
     	expect(rankings).to.not.be.empty
     	expect(rankings.schema).to.deep.equal(expectedSchema)
     	expect(rankings.path).to.equal('atp_rankings_current.csv')
@@ -26,7 +26,7 @@ describe('importer rankings', () => {
     })
 
       it('should have wta player rankings', () => {        
-    	var rankings = systemUnderTest['wta_player_rankings']
+    	var rankings = sut_rankings['wta_player_rankings']
     	expect(rankings).to.not.be.empty
     	expect(rankings.schema).to.deep.equal(expectedSchema)
     	expect(rankings.path).to.equal('wta_rankings_current.csv')

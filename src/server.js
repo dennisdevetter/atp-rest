@@ -10,6 +10,7 @@ dataStore.configure(config.database).then(() => {
 	console.log('database connection established, starting server...')
 	var app = express()
 	api.start({app, config})
+	console.log(`REST API has been started`)
 }).catch((error) => {
 	console.log('Something went wrong starting the server. ERROR: ' + error)
 	// todo.. send email ??
