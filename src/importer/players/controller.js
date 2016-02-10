@@ -1,6 +1,6 @@
 import PlayerModel from '../../database/models/player-model'
 
-const savePlayer = (options) => (jsonPlayer)  => {
+const savePlayer = (options) => (jsonPlayer) => {
 
 	var { sex } = options
 
@@ -9,7 +9,7 @@ const savePlayer = (options) => (jsonPlayer)  => {
 			return
 		}
 
-		model = new PlayerModel({
+		model = PlayerModel.create({
 			playerId : jsonPlayer.player_id,
 			firstName: jsonPlayer.first_name,
 			lastName: jsonPlayer.last_name,
@@ -25,4 +25,6 @@ const savePlayer = (options) => (jsonPlayer)  => {
 	})  		
 }
 
-export default savePlayer
+export default {
+	save: savePlayer
+}

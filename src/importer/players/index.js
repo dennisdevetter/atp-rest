@@ -1,4 +1,4 @@
-import savePlayer from './save-player'
+import controller from './controller'
 
 const schema = [
 	'player_id', 
@@ -12,13 +12,13 @@ const schema = [
 var atp_players = {
 	schema,
 	path: 'atp_players.csv',
-	onSave : savePlayer({sex: 'M'})
+	onSave : controller.save({sex: 'M'})
 }
 
 var wta_players = {
 	schema,
 	path: 'wta_players.csv',
-	onSave : savePlayer({sex: 'F'})
+	onSave : controller.save({sex: 'F'})
 }
 
 export default {

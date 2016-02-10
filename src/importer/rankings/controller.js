@@ -26,4 +26,6 @@ const saveRankings = (json)  => {
 	})  		
 }
 
-export default saveRankings
+export default {
+	save: saveRankings
+}
