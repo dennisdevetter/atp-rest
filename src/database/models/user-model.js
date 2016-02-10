@@ -12,5 +12,9 @@ export function getSchema(){
 	return userSchema
 }
 
-export default mongoose.model('User', userSchema)
+var UserModel = mongoose.model('User', userSchema)
+export default UserModel
+
+UserModel.create = (data) => new UserModel(data)
+
 

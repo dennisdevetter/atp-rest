@@ -26,3 +26,4 @@ export default PlayerModel
 
 PlayerModel.create = (data) => new PlayerModel(data)
 
+
