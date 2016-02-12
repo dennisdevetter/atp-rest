@@ -8,5 +8,8 @@ var scheduledTaskSchema = new Schema({
     status: { type: Number, required: false, default:0}
 })
 
-export default mongoose.model('ScheduledTask', scheduledTaskSchema)
+var ScheduledTaskModel = mongoose.model('ScheduledTask', scheduledTaskSchema)
+export default ScheduledTaskModel
+
+ScheduledTaskModel.create = (data) => new ScheduledTaskModel(data)
 

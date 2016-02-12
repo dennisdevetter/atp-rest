@@ -9,7 +9,7 @@ describe('importer matches configuration', () => {
       expect(Object.keys(sut_matches).length).to.equal(1)
     })
 
-    it('should have matches value', () => {        
+    it('should have correct value for the matches configuration', () => {        
     	var matches = sut_matches['matches']
     	expect(matches).to.not.be.empty
     	expect(matches.schema).to.deep.equal(expectedSchema)

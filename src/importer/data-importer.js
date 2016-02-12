@@ -25,7 +25,26 @@ function startImport(targetFiles) {
 		task : handleAllTargetFiles(targetFiles)
 	}
 	
-	taskRunner.startTask(task)
+	taskRunner.startTask(task).then((taskModel) => {		
+		var statusMessage = getStatusMessage(taskModel.status)
+		var dateString = new Date(taskModel.lastExecutedOn)
+		console.log(`task was executed on ${dateString} with status: ${statusMessage}`)
+	})
+}
+
+
+// =======================================================================================
+// Converts the status int to a string
+// =======================================================================================
+function getStatusMessage(status){
+	switch(status) {		
+		case 1:
+			return 'succesfully'
+		case 2:
+			return 'failed'
+		default:
+			return '(not yet)'
+	}
 }
 
 // ==========================================================================================
