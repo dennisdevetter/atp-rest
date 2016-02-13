@@ -24,7 +24,7 @@ describe('task runner',() => {
 		// arrange
 		var options = { taskId: 'test_task', task: () => helper.createResolvedPromise() }            	
       	var scheduledTaskModel = { taskId: options.taskId,	lastExecutedOn: null, status: null }
-      	var getTask = root.sandbox.stub(controller, 'getTask').returns(helper.createResolvedPromise(scheduledTaskModel))    
+      	var getTask = root.sandbox.stub(controller, 'ensureTask').returns(helper.createResolvedPromise(scheduledTaskModel))    
       	var finishTask = root.sandbox.stub(controller, 'finishTask').returns(helper.createResolvedPromise(null))    
 
 		// act
@@ -41,7 +41,7 @@ describe('task runner',() => {
 	it ('should reject the task if getting the task model fails', (done) => {				
 		// arrange
 		var options = { taskId: 'test_task', task: () => helper.createResolvedPromise() }            	      	
-      	var getTask = root.sandbox.stub(controller, 'getTask').returns(helper.createRejectedPromise('getTask error'))    
+      	var getTask = root.sandbox.stub(controller, 'ensureTask').returns(helper.createRejectedPromise('getTask error'))    
       	
 		// act
 		var taskPromise = sut_taskRunner.startTask(options)
@@ -57,7 +57,7 @@ describe('task runner',() => {
 		// arrange
 		var options = { taskId: 'test_task', task: () => helper.createResolvedPromise() }            	
       	var scheduledTaskModel = { taskId: options.taskId,	lastExecutedOn: null, status: null }
-      	var getTask = root.sandbox.stub(controller, 'getTask').returns(helper.createResolvedPromise(scheduledTaskModel))    
+      	var getTask = root.sandbox.stub(controller, 'ensureTask').returns(helper.createResolvedPromise(scheduledTaskModel))    
       	var finishTask = root.sandbox.stub(controller, 'finishTask').returns(helper.createRejectedPromise('finishTask error'))    
       	
 		// act
@@ -74,7 +74,7 @@ describe('task runner',() => {
 		// arrange
 		var options = { taskId: 'test_task', task: () => helper.createRejectedPromise('executed task error') }            	
       	var scheduledTaskModel = { taskId: options.taskId,	lastExecutedOn: null, status: null }
-      	var getTask = root.sandbox.stub(controller, 'getTask').returns(helper.createResolvedPromise(scheduledTaskModel))    
+      	var getTask = root.sandbox.stub(controller, 'ensureTask').returns(helper.createResolvedPromise(scheduledTaskModel))    
       	var finishTask = root.sandbox.stub(controller, 'finishTask').returns(helper.createResolvedPromise())    
       	
 		// act

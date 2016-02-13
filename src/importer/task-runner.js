@@ -16,7 +16,7 @@ function startTask(options){
 
 	return new Promise((resolve, reject) => {
 		try {			
-			controller.getTask(taskId).then((taskModel) => {	
+			controller.ensureTask(taskId).then((taskModel) => {	
 				executeTask(taskModel).then(() => { 							
 					controller.finishTask(taskModel).then(resolve).catch(reject)
 				}).catch((err) => {					
