@@ -17,7 +17,7 @@ describe('scheduled task controller',() => {
 			promise.then(() => {
 				expect(findTask).to.have.been.calledWith({ taskId })
 				done()
-			})
+			}).catch(done)
 		})
 
 		it ('should throw exception if the task id is null', () => {		
@@ -49,11 +49,11 @@ describe('scheduled task controller',() => {
 			// arrange
 			var taskId = 'task id'
 			var options = { taskId }
-			var scheduledTaskModel = { 	      	
+			var taskModel = { 	      	
 				taskId,	
-	      		save : () => helper.createResolvedPromise(scheduledTaskModel)
+	      		save : () => helper.createResolvedPromise(taskModel)
 	      	}
-			var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(scheduledTaskModel) 
+			var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(taskModel) 
 
 			// act
 			var promise = sut_scheduledTaskController.createTask(options)
@@ -61,21 +61,21 @@ describe('scheduled task controller',() => {
 			// assert
 			promise.then((result) => {
 				expect(createModel).to.have.been.calledWith({ taskId })		
-				expect(result).to.equal(scheduledTaskModel)						
+				expect(result).to.equal(taskModel)						
 				done()
-			})
+			}).catch(done)
 		})
 
 		it ('should reject if the task model cannot be saved', (done) => {		
 			// arrange
 			var taskId = 'task id'
 			var options = { taskId }
-			var scheduledTaskModel = { 	      	
+			var taskModel = { 	      	
 				taskId,	
 	      		save : () => helper.createRejectedPromise('error saving')
 	      	}
-			var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(scheduledTaskModel) 
-			var saveSpy = sinon.spy(scheduledTaskModel, 'save')
+			var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(taskModel) 
+			var saveSpy = sinon.spy(taskModel, 'save')
 
 			// act
 			var promise = sut_scheduledTaskController.createTask(options)
@@ -113,106 +113,81 @@ describe('scheduled task controller',() => {
 		})
 	})
 
-	// it ('should resolve a task, fetch the task model and execute the task ', (done) => {				
-	// 	// arrange
-	// 	var options = { taskId: 'test_task', task: () => createResolvedPromise() }            	
- //      	var scheduledTaskModel = { 
- //      		taskId: options.taskId,	lastExecutedOn: null, status: null,
- //      		save : () => createResolvedPromise(scheduledTaskModel)
- //      	}
- //      	var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(createResolvedPromise(scheduledTaskModel))            	      	
- //      	var saveScheduledTaskModel = sinon.spy(scheduledTaskModel, 'save')   
- //      	var taskToRun = sinon.spy(options, 'task')
+	describe('finish task',() => {   
+		it('should throw error if the task model is null', () => {
+			var taskModel = null
+			expect(sut_scheduledTaskController.finishTask.bind(sut_scheduledTaskController, taskModel)).to.throw('taskModel cannot be null')
+		})
 
-	// 	// act
-	// 	var taskPromise = sut_scheduledTaskController.startTask(options)
+		function save(error, done) {
+			// arrange			
+			var taskModel = { 	      	
+				taskId: 'task id',	
+				lastExecutedOn: null,
+				status: null,
+	      		save : () => helper.createResolvedPromise(taskModel)
+	      	}
 
- //      	// assert
- //      	taskPromise.then(() => {      		
- //      		expect(saveScheduledTaskModel).to.have.been.called       
- //      		expect(taskToRun).to.have.been.calledWith(scheduledTaskModel)
- //      		expect(scheduledTaskModel.lastExecutedOn).to.not.be.empty
- //      		expect(scheduledTaskModel.status).to.equal(1)
- //      		expect(scheduledTaskModel.taskId).to.equal(options.taskId)
- //      		done()
- //      	})	
-	// })
+			// act
+			var promise = sut_scheduledTaskController.finishTask(taskModel, error)
+
+			// assert
+			promise.then((result) => {												
+				expect(result).to.equal(taskModel)		
+				expect(taskModel.lastExecutedOn).to.not.be.empty				
+				expect(taskModel.status).to.equal(error ? 2 : 1)								
+				done()
+			}).catch(done)
+		}
+
+		it('should save without error and return the updated task model ', (done) => {
+			save(null, done)
+		})
+
+		it('should save with error and return the updated task model ', (done) => {
+			save('an error occured', done)
+		})
+	})
+
+	describe('ensure task',() => {   
+		it ('should throw exception if the task id is null', () => {		
+			var options = null
+			expect(sut_scheduledTaskController.ensureTask.bind(sut_scheduledTaskController, options)).to.throw('taskId cannot be null')
+		})
+
+		it ('should resolve the task model if it is found', (done) => {		
+			// arrange
+			var taskId = 'task id'
+			var taskModel = {}						
+			var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(helper.createResolvedPromise(taskModel))    
+
+			// act
+			var promise = sut_scheduledTaskController.ensureTask(taskId)
+
+			// assert
+			promise.then((result) => {
+				expect(result).to.equal(taskModel)
+				done()
+			}).catch(done)
+
+		})
+
+		it ('should create the task model if it is not found and resolve it', (done) => {		
+			// arrange
+			var taskId = 'task id'
+			var taskModel = {save : () => helper.createResolvedPromise(taskModel)}						
+			var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(helper.createResolvedPromise(null))    
+			var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(taskModel) 
+
+			// act
+			var promise = sut_scheduledTaskController.ensureTask(taskId)
+
+			// assert
+			promise.then((result) => {
+				expect(result).to.equal(taskModel)
+				done()
+			}).catch(done)
+
+		})
+	})
 })
-
-	
-
-	
-
-	// it ('should reject a task if the external task fails ', (done) => {		
-	// 	// arrange
-	// 	var options = { taskId: 'test_task', task: () => createRejectedPromise('error during executing task') }              
- //      	var scheduledTaskModel = { 
- //      		taskId: options.taskId,	lastExecutedOn: null, status: null,
- //      		save : () => createResolvedPromise(scheduledTaskModel)
- //      	}
- //  		var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(createResolvedPromise(scheduledTaskModel))          
-
-	// 	// act
-	// 	var taskPromise = sut_taskRunner.startTask(options)
-
- //      	// assert
- //      	taskPromise.catch((error) => {      		
- //      		expect(error).to.equal('error during executing task')
- //      		expect(scheduledTaskModel.lastExecutedOn).to.not.be.empty
- //      		expect(scheduledTaskModel.status).to.equal(2)
- //      		expect(scheduledTaskModel.taskId).to.equal(options.taskId)
- //      		done()
- //      	})	
-	// })
-
-	// it ('should reject a task if an error occurs fetching the task model ', (done) => {				
-
-	// 	// arrange
-	// 	var options = { taskId: 'test_task', task: () => createResolvedPromise() }      
-	// 	var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(createRejectedPromise('some error'))   
-
-	// 	// act
-	// 	var taskPromise = sut_taskRunner.startTask(options)
-
-	// 	// assert
-	// 	taskPromise.catch((error) => {		
-	// 		expect(error).to.equal('some error')
-	// 		done()
-	// 	})
-	// })
-
-	// it ('should reject a task if the created task model is null ', (done) => {				
-
-	// 	// arrange
-	// 	var options = { taskId: 'test_task', task: () => createResolvedPromise() }      
-	// 	var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(createResolvedPromise(null))   
-	// 	var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(null)      
-
-	// 	// act
-	// 	var taskPromise = sut_taskRunner.startTask(options)
-
-	// 	// assert
-	// 	taskPromise.catch((error) => {		
-	// 		expect(error).to.equal('failed to create the model with task id ' + options.taskId)
-	// 		done()
-	// 	})
-	// })
-
-	// it ('should reject a task if an error occurs creating a new task model ', (done) => {				
-	// 	// arrange
-	// 	var options = { taskId: 'test_task', task: () => createResolvedPromise() }      
-	// 	var findTask = root.sandbox.stub(ScheduledTaskModel, 'findOne').returns(createResolvedPromise(null))   
-	// 	var scheduledTaskModel = {       		
- //      		save : () => createRejectedPromise('error during save')
- //      	}
-	// 	var createModel = root.sandbox.stub(ScheduledTaskModel, 'create').returns(scheduledTaskModel)      
-
-	// 	// act
-	// 	var taskPromise = sut_taskRunner.startTask(options)
-
-	// 	// assert
-	// 	taskPromise.catch((error) => {		
-	// 		expect(error).to.equal('error during save')
-	// 		done()
-	// 	})
-	// })	

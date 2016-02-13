@@ -14,9 +14,14 @@ function getTask(taskId) {
 }
 
 function ensureTask(taskId){	
+	if (!taskId) {
+		throw Error('taskId cannot be null')
+	}	
+
 	return new Promise((resolve, reject) => {		
 		getTask(taskId).then((model) => {				
 			if (!model) {					
+				var options = { taskId }
 				createTask(options).then(resolve).catch(reject)
 			} else {
 				resolve(model)
@@ -51,6 +56,9 @@ function createTask(options) {
 }
 
 function finishTask(taskModel, error){
+	if (!taskModel) {
+		throw Error('taskModel cannot be null')
+	}	
 	return new Promise((resolve, reject) => {
 		try {
 			taskModel.lastExecutedOn = Date.now()
