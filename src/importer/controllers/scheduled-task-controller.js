@@ -6,17 +6,14 @@ const statusses = {
 }
 
 function getTask(taskId) {
-	if (!taskId) {
-		throw Error('taskId cannot be null')
-	}	
+	validateRequiredArgument({taskId})
+
 	var options = { taskId }
 	return ScheduledTaskModel.findOne(options)
 }
 
 function ensureTask(taskId){	
-	if (!taskId) {
-		throw Error('taskId cannot be null')
-	}	
+	validateRequiredArgument({taskId})
 
 	return new Promise((resolve, reject) => {		
 		getTask(taskId).then((model) => {				
@@ -32,10 +29,7 @@ function ensureTask(taskId){
 
 function createTask(options) {	
 	var { taskId } = options || {}
-
-	if (!taskId) {
-		throw Error('taskId cannot be null')
-	}
+	validateRequiredArgument({ taskId })
 
 	return new Promise((resolve, reject) => {
 		try {			
@@ -56,9 +50,8 @@ function createTask(options) {
 }
 
 function finishTask(taskModel, error){
-	if (!taskModel) {
-		throw Error('taskModel cannot be null')
-	}	
+	validateRequiredArgument({ taskModel })	
+
 	return new Promise((resolve, reject) => {
 		try {
 			taskModel.lastExecutedOn = Date.now()
@@ -74,6 +67,16 @@ function finishTask(taskModel, error){
 	})	
 }
 
+function validateRequiredArgument(options) {
+	var keys = Object.keys(options)
+	if (keys.length > 0) {
+		keys.forEach((key) => {
+			if (!options[key]) {
+				throw Error(`${key} cannot be null`)
+			}
+		})
+	}
+}
 
 export default {
 	getTask,
