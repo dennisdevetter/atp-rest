@@ -6,6 +6,9 @@ const statusses = {
 }
 
 function getTask(taskId) {
+	if (!taskId) {
+		throw Error('taskId cannot be null')
+	}	
 	var options = { taskId }
 	return ScheduledTaskModel.findOne(options)
 }
@@ -14,7 +17,7 @@ function ensureTask(taskId){
 	return new Promise((resolve, reject) => {		
 		getTask(taskId).then((model) => {				
 			if (!model) {					
-				createTaskModel(options).then(resolve).catch(reject)
+				createTask(options).then(resolve).catch(reject)
 			} else {
 				resolve(model)
 			}				
@@ -23,7 +26,12 @@ function ensureTask(taskId){
 }
 
 function createTask(options) {	
-	var { taskId } = options
+	var { taskId } = options || {}
+
+	if (!taskId) {
+		throw Error('taskId cannot be null')
+	}
+
 	return new Promise((resolve, reject) => {
 		try {			
 			var model = ScheduledTaskModel.create({ taskId })
@@ -36,7 +44,7 @@ function createTask(options) {
 				reject('failed to create the model with task id ' + taskId)
 			}			
 		}
-		catch(error) {
+		catch(error) {			
 			reject(error)
 		}
 	})
