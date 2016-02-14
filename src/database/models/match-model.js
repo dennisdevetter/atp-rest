@@ -38,12 +38,14 @@ var matchSchema = new Schema({
     lBpFaced: { type: Number, required: false} 
 })
 
+var MatchModel = mongoose.model('Match', matchSchema)
+MatchModel.create = (data) => new MatchModel(data)
+
 export function getSchema(){
     return matchSchema
 }
 
-var MatchModel = mongoose.model('Match', matchSchema)
 export default MatchModel
 
-MatchModel.create = (data) => new MatchModel(data)
+
 

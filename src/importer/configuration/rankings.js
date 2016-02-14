@@ -1,4 +1,4 @@
-import rankingController from '../controllers/ranking-controller'
+import rankingController from '../../database/controllers/ranking-controller'
 
 const schema = [
 	'ranking_date', 
@@ -11,13 +11,13 @@ const schema = [
 var atp_player_rankings = {
 	schema,
 	path: 'atp_rankings_current.csv',
-	onSave : rankingController.save
+	onSave : rankingController.saveRanking
 }
 
 var wta_player_rankings = {
 	schema,
 	path: 'wta_rankings_current.csv',
-	onSave : rankingController.save
+	onSave : rankingController.saveRanking
 }
 
 export default {

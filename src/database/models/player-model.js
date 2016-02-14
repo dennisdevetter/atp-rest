@@ -17,13 +17,15 @@ var playerSchema = new Schema({
     } ]
 })
 
+var PlayerModel = mongoose.model('Player', playerSchema)
+PlayerModel.create = (data) => new PlayerModel(data)
+
 export function getSchema(){
-	return playerSchema
+    return playerSchema
 }
 
-var PlayerModel = mongoose.model('Player', playerSchema)
 export default PlayerModel
 
-PlayerModel.create = (data) => new PlayerModel(data)
+
 
 

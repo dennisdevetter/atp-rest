@@ -8,13 +8,13 @@ var userSchema = new Schema({
     password: String    
 })
 
+var UserModel = mongoose.model('User', userSchema)
+UserModel.create = (data) => new UserModel(data)
+
 export function getSchema(){
 	return userSchema
 }
 
-var UserModel = mongoose.model('User', userSchema)
 export default UserModel
-
-UserModel.create = (data) => new UserModel(data)
 
 
