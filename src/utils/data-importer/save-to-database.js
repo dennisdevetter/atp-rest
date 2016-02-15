@@ -1,13 +1,24 @@
-import Promise from 'bluebird'
+import { validateRequiredArgument } from '../../utils/argument-validation'
 
-export default function saveToDatabase(items, options) {
-	var { onSave } = options
+export default function saveToDatabase(items, saveItem) {	
+	validateRequiredArgument({ saveItem })
+
 	var failed = 0, succeeded = 0		
-
 	return new Promise((resolve, reject) => {
-		if (!onSave) {
-			reject('onSave is not defined')
-			return
+		try {
+			items && items.length && items.forEach((item) => {					
+				saveItem(item).then(() => {
+					succeeded++
+					resolveIfFinished()
+				}).catch((error) => {
+					console.log('failed to save. error:' + error)
+					failed++
+					resolveIfFinished()
+				})						
+			})			
+		} 
+		catch(error) {
+			reject(error)
 		}
 
 		function resolveIfFinished(){
@@ -17,19 +28,6 @@ export default function saveToDatabase(items, options) {
 				// so that it can be taken into account for the task runner
 				resolve()
 			}
-		}
-
-		if (items && items.length) {					
-			items.forEach((item) => {					
-				onSave(item).then(() => {
-					succeeded++
-					resolveIfFinished()
-				}).catch((error) => {
-					console.log('failed to save. error:' + error)
-					failed++
-					resolveIfFinished()
-				})						
-			})								
 		}
 	})
 }

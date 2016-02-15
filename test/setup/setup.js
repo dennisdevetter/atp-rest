@@ -2,7 +2,10 @@ module.exports = function(root) {
   root = root ? root : global;
   root.expect = root.chai.expect;
 
+  process.env.NODE_ENV = 'test'
+
   beforeEach(function() {
+
     // Using these globally-available Sinon features is preferrable, as they're
     // automatically restored for you in the subsequent `afterEach`
     root.sandbox = root.sinon.sandbox.create();
