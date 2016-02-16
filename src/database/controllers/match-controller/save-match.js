@@ -1,7 +1,7 @@
 import MatchModel from '../../models/match-model'
+import logger from '../../../utils/logger'
 
 const saveMatch = (jsonMatch)  => {
-
 	var filter = { 
 		tourneyId: jsonMatch.tourney_id, 
 		match: jsonMatch.match_num 
@@ -48,7 +48,9 @@ const saveMatch = (jsonMatch)  => {
 			lBpFaced: jsonMatch.l_bpFaced
 		})
 
-		return model.save()
+		return model.save().then(() => {
+			logger.log(`saved match with tourney id ${jsonMatch.tourney_id} and match number ${jsonMatch.match_num}`)
+		})
 	})  		
 }
 

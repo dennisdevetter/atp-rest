@@ -55,7 +55,7 @@ export default function tests(){
 			promise.then(() => {
 				expect(checkIfImportNeededStub).to.have.been.calledWith(filePath, taskInfo)
 				expect(convertFilesToJsonStub).to.have.been.calledWith(filePath, configuration)
-				expect(saveToDatabaseStub).to.have.been.calledWith(jsonResult, saveHandler)
+				expect(saveToDatabaseStub).to.have.been.calledWith(jsonResult, { saveItem: saveHandler })
 				done()
 			}).catch(done)
 		})
@@ -71,7 +71,7 @@ export default function tests(){
 				expect(checkIfImportNeededStub).to.have.been.calledWith(filePath, taskInfo)
 				expect(error).to.equal(somethingWentWrong)				
 				done()
-			})
+			}).catch(done)
 		})
 
 		it('should reject if the conversion of files while importing throws an error', (done) => {
@@ -87,7 +87,7 @@ export default function tests(){
 				expect(convertFilesToJsonStub).to.have.been.calledWith(filePath, configuration)
 				expect(error).to.equal(somethingWentWrong)				
 				done()
-			})
+			}).catch(done)
 		})		
 
 		it('should reject if saving to database throws an error', (done) => {
@@ -102,10 +102,10 @@ export default function tests(){
 			promise.catch((error) => {
 				expect(checkIfImportNeededStub).to.have.been.calledWith(filePath, taskInfo)
 				expect(convertFilesToJsonStub).to.have.been.calledWith(filePath, configuration)
-				expect(saveToDatabaseStub).to.have.been.calledWith(jsonResult, saveHandler)
+				expect(saveToDatabaseStub).to.have.been.calledWith(jsonResult, { saveItem: saveHandler })
 				expect(error).to.equal(somethingWentWrong)				
 				done()
-			})
+			}).catch(done)
 		})		
 	})
 }

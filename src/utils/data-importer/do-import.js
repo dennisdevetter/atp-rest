@@ -15,7 +15,7 @@ export default function doImport(filePath, configuration, taskInfo){
 			checkIfImportNeeded(filePath, taskInfo).then(({shouldImport}) => {
 				if (shouldImport) {					
 					convertFileToJson(filePath, configuration)
-						.then((json) => saveToDatabase(json, onSave))
+						.then((json) => saveToDatabase(json, { saveItem: onSave }))
 						.then(resolve)
 						.catch(reject)								
 				} else {

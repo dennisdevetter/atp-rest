@@ -1,14 +1,14 @@
 import { validateRequiredArgument } from '../../utils/argument-validation'
 import logger from '../../utils/logger'
 
-export default function saveToDatabase(items = [], options = {}) {	
+export default function saveToDatabase(items = [], options = {}) {		
 	var { saveItem } = options || {}
 	validateRequiredArgument({ saveItem })
 
 	var failed = 0, succeeded = 0		
 	return new Promise((resolve, reject) => {
 		try {
-			items && items.length && items.forEach((item) => {					
+			items.forEach((item) => {		
 				saveItem(item).then(() => {
 					succeeded++
 					resolveIfFinished()

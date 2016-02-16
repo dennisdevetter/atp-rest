@@ -1,9 +1,12 @@
 import PlayerModel from '../../models/player-model'
+import logger from '../../../utils/logger'
 
 const saveRankings = (json)  => {
 	
 	return PlayerModel.findOne({ playerId: json.player_id }).then((model) => {		
-		if (!model) return		
+		if (!model) {
+			return		
+		}
 
 		if (!model.ranking) {
 			model.ranking = []
@@ -20,7 +23,9 @@ const saveRankings = (json)  => {
 			tours : json.tours
 		})
 
-		return model.save()
+		return model.save().then(() => {
+			logger.log(`saved ranking with date ${json.ranking_date} and points ${json.ranking_points}`)
+		})
 	})  		
 }
 

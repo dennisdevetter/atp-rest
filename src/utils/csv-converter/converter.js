@@ -7,9 +7,9 @@ export default function convert(filePath, headers, firstLineContainsHeader) {
 
 	return new Promise((resolve, reject) => {
 		try {				
-			fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-			    if (!err){
-			    	convertDataToJson(data, headers, firstLineContainsHeader).then((result) => {			    				    		
+			fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){				
+			    if (!err){			    	
+			    	convertDataToJson(data, headers, firstLineContainsHeader).then((result) => {			    				    					    		
 						resolve(result)
 			    	}).catch((err) => {
 			    		reject(err)

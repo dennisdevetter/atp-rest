@@ -1,4 +1,5 @@
 import PlayerModel from '../../models/player-model'
+import logger from '../../../utils/logger'
 
 // todo refactor out the options parameter and apply it to the json itself
 
@@ -21,7 +22,9 @@ const savePlayer = (options) => (jsonPlayer) => {
 			sex: sex
 		})
 										
-		return model.save()
+		return model.save().then(() => {
+			logger.log(`saved player with id ${jsonPlayer.player_id} and name ${jsonPlayer.first_name} ${jsonPlayer.last_name}`)
+		})
 	})  		
 }
 
