@@ -55,8 +55,51 @@ const schema = [
 var matches = {
 	schema,
 	path: '(atp|wta)_matches_\\d{4}.csv',
-	onSave : matchController.saveMatch,
+	onSave : saveMatch,
 	firstLineContainsHeader : true
+}
+
+function saveMatch(json) {
+	var dataModel = convertToDataModel(json)
+	return matchController.saveMatch(dataModel)
+}
+
+function convertToDataModel(json) {
+	return {
+		tourneyId: json.tourney_id,
+		tourneyName: json.tourney_name,
+		tourneyLevel: json.tourney_level,			
+		tourneyDate: json.tourney_date,
+		match: json.match_num,
+		surface: json.surface,
+		drawSize: json.draw_size,
+		winnerId: json.winner_id,
+		winnerIoc: json.winner_ioc,
+		loserId: json.loser_id,
+		loserIoc: json.loser_ioc,
+		score: json.score,
+		bestOf: json.best_of,
+		round: json.round,
+		minutes: json.minutes,
+		wAce: json.w_ace,
+		wDf: json.w_df,
+		wSvpt: json.w_svpt,
+		w1stIn: json.w_1stIn,
+		w1stWon: json.w_1stWon,
+		w2ndWon: json.w_2ndWon,
+		wSvGms: json.w_SvGms,
+		wBpSaved: json.w_bpSaved,
+		wBpFaced: json.w_bpFaced,
+		lAce: json.l_ace,
+		lDf: json.l_df,
+		lSvpt: json.l_svpt,
+		l1stIn: json.l_1stIn,
+		l1stWon: json.l_1stWon,
+		l2ndWon: json.l_2ndWon,
+		lSvGms: json.l_SvGms,
+		lBpSaved: json.l_bpSaved,
+		lBpFaced: json.l_bpFaced
+	}
 }
 
 export default {
