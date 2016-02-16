@@ -1,21 +1,24 @@
 import fileHelper from '../../utils/file-helper'
-import config from '../../config'
+import { getConfiguration } from '../../config'
+import { validateRequiredArgument } from '../../utils/argument-validation'
 
 function getDataFolder() {
+	var config = getConfiguration()
 	return config.importer.sourcePath
 }
 
 export default function getFileMatches(configuration) {
-
-	var { path } = configuration
+	var { path } = configuration || {}
+	validateRequiredArgument( { path })
 
 	return new Promise((resolve, reject) => {
-		var dataFolder = getDataFolder()
-		var filePath = dataFolder + path
+		try {			
+			var dataFolder = getDataFolder()		
 
-		try {
 			fileHelper.getContentsOfFolder(dataFolder).then((files) => {
-				var matches = files.filter((file) => file.match(path)).sort().reverse()
+				var matches = files.filter((file) => file.match(path))
+				matches.sort()
+				matches.reverse()
 
 				// return the absolute paths to the files.
 				var filePaths = []
@@ -27,7 +30,7 @@ export default function getFileMatches(configuration) {
 					filePaths,
 					configuration
 				})
-			})			
+			}).catch(reject)			
 		}
 		catch (error) {
 			reject(error)

@@ -1,4 +1,4 @@
-import doImport from 'do-import'
+import doImport from './do-import'
 
 export default function handleTargetFile(targetFile, taskInfo) {
 	var { filePaths, configuration } = targetFile
