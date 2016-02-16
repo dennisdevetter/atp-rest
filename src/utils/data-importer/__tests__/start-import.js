@@ -13,14 +13,9 @@ export default function tests() {
 		}) 	
 
 		it('should start the import and log a message when done', (done) => {
-
-			var now = Date.now()
-			var targetFiles = ['aa','bb']
-			var task = () => {}			
-			var taskModel = { status: 2, lastExecutedOn: now}
+			var targetFiles = ['aa','bb'], task = () => {}, now = Date.now(), taskModel = { status: 2, lastExecutedOn: now}			
+			var statusMessage = 'the status message', dateString = new Date(now)
 			var taskPromise = Promise.resolve(taskModel)
-			var statusMessage = 'the status message'
-			var dateString = new Date(now)
 
 			var handleAllTargetFilesStub = root.sandbox.stub(handleAllTargetFiles, 'default').returns(task)
 			var startTaskStub = root.sandbox.stub(taskRunner, 'startTask').returns(taskPromise)
