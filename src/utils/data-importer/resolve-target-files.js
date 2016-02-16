@@ -1,4 +1,9 @@
+import { validateRequiredArgument } from '../../utils/argument-validation'
+import getFileMatches from './get-file-matches'
+
 export default function resolveTargetFiles(configurations) {	
+	validateRequiredArgument({ configurations })
+
 	return new Promise((resolve, reject) => {
 		var keys = Object.keys(configurations), targetFiles = [], index = 0
 

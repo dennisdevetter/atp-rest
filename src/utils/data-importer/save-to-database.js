@@ -1,6 +1,8 @@
 import { validateRequiredArgument } from '../../utils/argument-validation'
+import logger from '../../utils/logger'
 
-export default function saveToDatabase(items, saveItem) {	
+export default function saveToDatabase(items = [], options = {}) {	
+	var { saveItem } = options || {}
 	validateRequiredArgument({ saveItem })
 
 	var failed = 0, succeeded = 0		
@@ -11,7 +13,7 @@ export default function saveToDatabase(items, saveItem) {
 					succeeded++
 					resolveIfFinished()
 				}).catch((error) => {
-					console.log('failed to save. error:' + error)
+					logger.log('failed to save. error:' + error)
 					failed++
 					resolveIfFinished()
 				})						
@@ -23,10 +25,11 @@ export default function saveToDatabase(items, saveItem) {
 
 		function resolveIfFinished(){
 			if (succeeded + failed == items.length) {
-				console.log('import done.')
-				// todo: add the success and failed count for the individual items
-				// so that it can be taken into account for the task runner
-				resolve()
+				logger.log('import done.')				
+				resolve({
+					succeeded,
+					failed
+				})
 			}
 		}
 	})

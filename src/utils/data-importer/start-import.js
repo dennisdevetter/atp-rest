@@ -1,6 +1,11 @@
+import handleAllTargetFiles from './handle-all-target-files'
+import getStatusMessage from './status-message'
+import logger from '../../utils/logger'
+import taskRunner from '../task-runner'
+
 export default function startImport(targetFiles) {	
 	if (!targetFiles) {
-		console.log('nothing to import')
+		logger.log('nothing to import')
 		return
 	}
 
@@ -12,6 +17,6 @@ export default function startImport(targetFiles) {
 	taskRunner.startTask(task).then((taskModel) => {		
 		var statusMessage = getStatusMessage(taskModel.status)
 		var dateString = new Date(taskModel.lastExecutedOn)
-		console.log(`task was executed on ${dateString} with status: ${statusMessage}`)
+		logger.log(`task was executed on ${dateString} with status: ${statusMessage}`)
 	})
 }
