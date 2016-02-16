@@ -1,4 +1,3 @@
-import Promise from 'bluebird'
 import systemUnderTest from '../promisify'
 
 export default function tests() {

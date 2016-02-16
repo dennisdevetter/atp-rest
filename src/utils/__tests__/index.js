@@ -13,7 +13,9 @@ describe('UTILS', () => {
 	
 	require('./argument-validation').default()
 	require('./logger').default()
-
 	require('../task-runner/__tests__').default()
 	require('../data-importer/__tests__').default()
+	require('../file-helper/__tests__').default()
+	require('../cache-helper/__tests__').default()
+	require('../csv-converter/__tests__').default()
 })

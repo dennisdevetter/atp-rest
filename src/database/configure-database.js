@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Promise from 'bluebird'
 import promisifyMongoose from './utils/promisify'
 
 export default function configureDatabase(options) {			

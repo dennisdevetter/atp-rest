@@ -1,9 +1,10 @@
 import convertDataToJson from './convert-datatojson'
+import { validateRequiredArgument } from '../../utils/argument-validation'
 import fs from 'fs'
-import path from 'path'
-import Promise from 'bluebird'
 
 export default function convert(filePath, headers, firstLineContainsHeader) {
+	validateRequiredArgument({filePath})
+
 	return new Promise((resolve, reject) => {
 		try {				
 			fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){

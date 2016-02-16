@@ -1,6 +1,5 @@
 import PlayerModel from '../../../../database/models/player-model'
 import sut_saveRankings from '../save-ranking'
-import Promise from 'bluebird'
 
 export default function tests() {
   describe('save ranking', () => {

@@ -1,7 +1,6 @@
 import taskController from '../../database/controllers/task-controller'
 import taskConstants from '../../database/constants/task'
 import { validateRequiredArgument } from '../argument-validation'
-import Promise from 'bluebird'
 
 export function updateTaskModel(taskModel, options) {
 	var { lastExecutedOn, status } = options

@@ -1,20 +1,39 @@
 import fs from 'fs'	
+import cacheHelper from'../cache-helper'
 
-export default function getContentsOfFolder(path) {
-	var cache = {}
+var cacheKey = '$$FolderContent$$'
+
+function getContentFromCache(path) {
+	var cache = cacheHelper.get(cacheKey)	
+	if (cache) {
+		return cache[path]
+	}
+	return null
+}
+
+function addContentsToCache(path, contents){
+	var cache = cacheHelper.get(cacheKey) 	
+	if (!cache) {
+		cache = {}
+		cacheHelper.add(cacheKey, cache)
+	}
+	cache[path] = contents
+}
+
+export default function getContentsOfFolder(path) {	
 	return new Promise((resolve, reject) => {
-		var contents = cache[path]
+
+		var contents = getContentFromCache(path)
 		if (contents){
 			resolve(contents)
 			return
 		}
-
-		// reads the directory content
+		
 		fs.readdir(path, (err, files) => {
 			if (err) {
 				throw Error(err)
 			}
-			cache[path] = files
+			addContentsToCache(path, files)
 			resolve(files)
 		})
 	})

@@ -1,6 +1,5 @@
 import PlayerModel from '../../../../database/models/player-model'
 import sut_savePlayer from '../save-player'
-import Promise from 'bluebird'
 
 export default function tests() {
   describe('save player', () => {
@@ -24,7 +23,7 @@ export default function tests() {
         var options = { sex: 'M' }      
         var playerWasNotFound = Promise.resolve(null)          
         var findPlayer = root.sandbox.stub(PlayerModel, 'findOne').returns(playerWasNotFound)        
-        var playerModel = { save : Promise.resolve }
+        var playerModel = { save : () => Promise.resolve() }
         var createModel = sinon.stub(PlayerModel, 'create').returns(playerModel)      
         var saveThePlayer = sinon.spy(playerModel, 'save')                  
         var jsonPlayer = createJsonPlayer(options)
@@ -38,7 +37,7 @@ export default function tests() {
             expect(saveThePlayer).to.have.been.called       
             expect(createModel).to.have.been.calledWith(newPlayerModel)        
             done()
-        })           
+        }).catch(done)           
       })   
   })
 }

@@ -1,6 +1,5 @@
 import TaskModel from '../../../database/models/task-model'
 import taskController from '../../../database/controllers/task-controller'
-import Promise from 'bluebird'
 
 var finishTask = require('../finish-task')
 var startTask = require('../start-task')	

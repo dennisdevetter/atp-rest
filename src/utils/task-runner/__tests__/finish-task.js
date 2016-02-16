@@ -1,5 +1,4 @@
 import TaskModel from '../../../database/models/task-model'
-import Promise from 'bluebird'
 var finishTask = require('../finish-task')	
 var sut_finishTask = finishTask.default
 

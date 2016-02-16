@@ -1,4 +1,3 @@
-import Promise from 'bluebird'
 var startImporter = require('../start-importer')
 var sut_startImporter = startImporter.default
 

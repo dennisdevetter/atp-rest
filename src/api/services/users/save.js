@@ -1,5 +1,4 @@
 import UserModel from '../../../database/models/user-model'
-import Promise from 'bluebird'
 
 export default function save(users = []){
 

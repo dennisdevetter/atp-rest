@@ -1,6 +1,5 @@
 import finishTask from './finish-task'
 import taskController from '../../database/controllers/task-controller'
-import Promise from 'bluebird'
 
 export default function startTask(options){
 	var { taskId, task } = options

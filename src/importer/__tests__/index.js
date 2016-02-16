@@ -1,5 +1,3 @@
-import Promise from 'bluebird'
-
 describe('IMPORTER', () => {    
 
 	it('should start with options', () => {

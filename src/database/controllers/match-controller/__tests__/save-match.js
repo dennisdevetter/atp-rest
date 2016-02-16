@@ -1,49 +1,48 @@
 import sut_saveMatch from '../save-match'
 import MatchModel from '../../../../database/models/match-model'
-import Promise from 'bluebird'
 
 export default function tests() {
-	describe('save match', () => {
-		it('should not be empty', () => {                          
-			expect(sut_saveMatch).to.not.be.empty  				
-	 	})
+      describe('save match', () => {
+      	it('should not be empty', () => {                          
+      		expect(sut_saveMatch).to.not.be.empty  				
+       	})
 
-		it ('should not save when the match is already found', () => {
+      	it ('should not save when the match is already found', () => {
 
-			var jsonMatch = createJsonMatch()
+      		var jsonMatch = createJsonMatch()
 
-			var matchModel = { save: sinon.spy() }
-			var matchWasFound = Promise.resolve(matchModel)          
-			var findMatch = root.sandbox.stub(MatchModel, 'findOne').returns(matchWasFound)            
-			var findQuery = { tourneyId: jsonMatch.tourney_id, match: jsonMatch.match_num }
+      		var matchModel = { save: sinon.spy() }
+      		var matchWasFound = Promise.resolve(matchModel)          
+      		var findMatch = root.sandbox.stub(MatchModel, 'findOne').returns(matchWasFound)            
+      		var findQuery = { tourneyId: jsonMatch.tourney_id, match: jsonMatch.match_num }
 
-			sut_saveMatch(jsonMatch)
+      		sut_saveMatch(jsonMatch)
 
-			expect(findMatch).to.have.been.calledWith(findQuery)      
-			expect(matchModel.save).to.not.have.been.called
-		})   
+      		expect(findMatch).to.have.been.calledWith(findQuery)      
+      		expect(matchModel.save).to.not.have.been.called
+      	})   
 
-		it ('should save when the match is not found', (done) => {
+      	it ('should save when the match is not found', (done) => {
 
-			var matchWasNotFound = Promise.resolve(null)        
-			var findMatch = root.sandbox.stub(MatchModel, 'findOne').returns(matchWasNotFound)        
-			var matchModel = { save : Promise.resolve }
-			var createModel = sinon.stub(MatchModel, 'create').returns(matchModel)      
-			var saveTheMatch = sinon.spy(matchModel, 'save')                  
-			var jsonMatch = createJsonMatch()
-			var newMatchModel = createMatchModel(jsonMatch)
-			var findQuery = { tourneyId: jsonMatch.tourney_id, match: jsonMatch.match_num }
+      		var matchWasNotFound = Promise.resolve(null)        
+      		var findMatch = root.sandbox.stub(MatchModel, 'findOne').returns(matchWasNotFound)        
+      		var matchModel = { save : () => Promise.resolve() }
+      		var createModel = sinon.stub(MatchModel, 'create').returns(matchModel)      
+      		var saveTheMatch = sinon.spy(matchModel, 'save')                  
+      		var jsonMatch = createJsonMatch()
+      		var newMatchModel = createMatchModel(jsonMatch)
+      		var findQuery = { tourneyId: jsonMatch.tourney_id, match: jsonMatch.match_num }
 
-			sut_saveMatch(jsonMatch)
-			
-			matchModel.save().then(() => {
-				expect(findMatch).to.have.been.calledWith(findQuery)    
-				expect(saveTheMatch).to.have.been.called       
-				expect(createModel).to.have.been.calledWith(newMatchModel)        
-				done()
-			})           
-		})   
-	})	 
+      		sut_saveMatch(jsonMatch)
+      		
+      		matchModel.save().then(() => {
+      			expect(findMatch).to.have.been.calledWith(findQuery)    
+      			expect(saveTheMatch).to.have.been.called       
+      			expect(createModel).to.have.been.calledWith(newMatchModel)        
+      			done()
+      		}).catch(done)          
+      	})   
+      })	 
 }
 
 

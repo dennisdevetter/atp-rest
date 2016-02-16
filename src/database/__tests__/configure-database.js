@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Promise from 'bluebird'
 var configureDatabase = require('../configure-database')
 var sut_configureDatabase = configureDatabase.default
 

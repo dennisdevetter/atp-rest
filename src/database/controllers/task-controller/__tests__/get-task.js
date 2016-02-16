@@ -1,6 +1,4 @@
 import TaskModel from '../../../../database/models/task-model'
-import Promise from 'bluebird'
-
 var getTask = require('../get-task')
 var sut_getTask = getTask.default
 
