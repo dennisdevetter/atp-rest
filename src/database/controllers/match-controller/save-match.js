@@ -1,28 +1,11 @@
-import MatchModel from '../../models/match-model'
-import logger from '../../../utils/logger'
+import match from './match-utils'
 
 export default function saveMatch(json) {
+	return new Promise((resolve, reject) => {				
 
-	var filter = { 
-		tourneyId: json.tourneyId, 
-		match: json.match
-	}
-
-	return new Promise((resolve, reject) => {
-	 	MatchModel.findOne(filter).then((model) => {		
-
-			if (!model) {
-				model = MatchModel.create(json)
-			} else {
-				Object.assign(model, json)	
-			}
-			
-			model.save().then(() => {
-				logger.log(`saved match with tourney id ${model.tourneyId} and match number ${model.match}`)
-				resolve(model)
-			}).catch(reject)	
-			
-		}).catch(reject)  		
+		match.get(json).then(match.save)
+							     .then(match.toJson)
+							     .then(resolve)
+							     .catch(reject)
 	})
 }
-

@@ -1,9 +1,9 @@
 import saveMatch from './save-match'
-import insertMatch from './insert-match'
+import getMatch from './get-match'
 
 const controller = {	
 	saveMatch,
-	insertMatch
+	getMatch
 }
 
 export default controller

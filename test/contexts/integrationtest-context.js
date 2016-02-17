@@ -1,48 +1,27 @@
-var databaseContext = require('../../src/database').default
-var testContext = require('./unittest-context')
+import testStore from '../helpers/test-store'
+import { runBeforeEach, runAfterEach } from './unittest-context'
 
 export default function(root) {    
+    root.testStore = testStore
+
     if (!process.env.MONGO_URI) {
       throw Error('MONGO_URI environment variable is missing')
     }
 
-    beforeEach(function(done) {
-      testContext.runBeforeEach(root)
-      connectToDatabase().then(done).catch(done)
+    before(function(done) {
+       testStore.connectToDatabase().then(testStore.dropDatabase).then(done).catch(done)
+    })
+
+    beforeEach(function() {
+      runBeforeEach(root)           
     });
 
     afterEach(function() {    
-       testContext.runAfterEach(root)
+      runAfterEach(root)
     });
+
+    after(function() {
+
+    })
 }
 
-function connectToDatabase(){
-  return new Promise((resolve, reject) => {
-    var connectionString = process.env.MONGO_URI
-    
-    databaseContext.configure({connectionString})         
-         .then(dropDatabase)
-         .then(resolve)
-         .catch((error) => {
-           console.log(`error connecting to the database with connectionString ${connectionString}`)
-            reject(error)
-         })
-  })  
-}
-
-function dropDatabase(connection) {
-  return new Promise((resolve, reject) => {
-    try {
-      connection.db.dropDatabase((err) => {
-        if (!err) {
-            resolve()
-          } else {
-            reject(err)
-          }
-      })      
-    }    
-    catch (error) {
-      reject(error)
-    }    
-  })
-}
