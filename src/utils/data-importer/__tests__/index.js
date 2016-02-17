@@ -1,6 +1,6 @@
 import sut_dataImporter from '../index'
 
-export default function tests() {
+describe('utils', () => {  		
 	describe('data importer', () => {
 
 		it('should not be empty', () => {
@@ -22,17 +22,6 @@ export default function tests() {
 				expect(startImportStub).to.have.been.called
 				done()
 			}).catch(done)
-		})
-
-		require('./convert-files').default()		
-		require('./do-import').default()
-		require('./get-file-matches').default()
-		require('./handle-all-target-files').default()
-		require('./handle-target-file').default()
-		require('./pre-import-check').default()
-		require('./resolve-target-files').default()
-		require('./save-to-database').default()
-		require('./start-import').default()
-		require('./status-message').default()
+		})		
 	})
-}
+})

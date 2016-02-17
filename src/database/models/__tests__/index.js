@@ -1,8 +1,7 @@
-export default function tests() {
+describe('database', () => {
 	describe('models', () => {
-		require('./user-model').default()
-		require('./task-model').default()
-		require('./player-model').default()
-		require('./match-model').default()		
+		it('TODO', () => {
+			
+		})
 	})	
-}
+})	

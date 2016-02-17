@@ -1,7 +1,7 @@
 var argumentValidation  = require('../argument-validation')
 var sut_validateRequiredArgument = argumentValidation.validateRequiredArgument  
 
-export default function tests() {
+describe('utils', () => {  	
 	describe('argument validation', () => {
 		it('should not be empty', () => {
 			expect(sut_validateRequiredArgument).to.not.be.empty			
@@ -18,4 +18,4 @@ export default function tests() {
 			expect(sut_validateRequiredArgument.bind(argumentValidation, args)).to.throw()
 		})
 	})
-}
+})

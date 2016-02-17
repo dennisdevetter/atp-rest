@@ -1,6 +1,6 @@
 import sut_logger from '../logger'
 
-export default function tests() {
+describe('utils', () => {  	
 	describe('logger', () => {
 		it('should not be empty', () => {
 			expect(sut_logger).to.not.be.empty
@@ -11,4 +11,4 @@ export default function tests() {
 			expect(typeof(sut_logger.log)).to.equal('function')
 		})
 	})
-}
+})

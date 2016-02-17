@@ -1,6 +1,6 @@
 var cacheHelper = require('../index')
 
-export default function tests() {
+describe('utils', () => {  	
 	describe('cache helper', () => {
 		var cacheInstance = { 
 			'item1': 'abc',
@@ -38,4 +38,4 @@ export default function tests() {
 
 		})
 	})
-}
+})

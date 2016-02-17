@@ -6,6 +6,7 @@ var babel = require('gulp-babel')
 var mochaGlobals = require('./test/setup/.globals')
 var manifest = require('./package.json')
 var nodemon = require('gulp-nodemon')
+var env = require('gulp-env')
 
 // Load all of our Gulp plugins
 const $ = loadPlugins()
@@ -38,7 +39,7 @@ function lintSrc() {
 }
 
 function lintTest() {
-  return lint('src/**/__tests__/*.js')
+  return lint('src/**/__i?tests__/*.js')
 }
 
 function lintGulpfile() {
@@ -52,8 +53,7 @@ function start(){
       presets: 'es2015',      
       ignore: ['node_modules/**/*.js'],
       script: path,
-      ext: 'js',
-      env: { 'NODE_ENV': 'development' },
+      ext: 'js',     
       tasks: [] // perform these tasks before starting the server
     }).on('start', function(){  
         //          
@@ -69,8 +69,8 @@ function build() {
     .pipe(gulp.dest(destinationFolder))   
 }
 
-function _mocha() {
-  return gulp.src(['test/setup/node.js', 'src/**/__tests__/*.js'], {read: false})
+function _mocha(testFiles) {
+  return gulp.src(['test/setup/node.js', testFiles], {read: false})
     .pipe(babel())
     .pipe($.mocha({
       reporter: 'spec',
@@ -80,7 +80,25 @@ function _mocha() {
 }
 
 function test() {
-  return _mocha()
+  return _mocha('src/**/__tests__/*.js')
+}
+
+function integrationtest() {
+ return _mocha('src/**/__itests__/*.js') 
+}
+
+function set_env(stage) {
+  return () => {
+    var vars = {
+      NODE_ENV: stage
+    }
+
+    if (stage == 'integrationtest') {
+        vars['MONGO_URI'] = 'mongodb://localhost:27017/integrationtest'
+    }
+
+    env({ vars })  
+  }  
 }
 
 const watchFiles = ['src/**/*', 'test/**/*', 'package.json', '**/.eslintrc', '.jscsrc', '!node_modules/**/*.js']
@@ -90,12 +108,15 @@ function watch() {
   gulp.watch(watchFiles, ['test'])
 }
 
+function watch_integrationtests() {
+  gulp.watch(watchFiles, ['integrationtest'])
+}
+
 // start the server in development mode
-gulp.task('start', start)
+gulp.task('start', ['set-env-development'], start)
 
 // Remove the built files
 gulp.task('clean', cleanDist)
-
 
 // Lint our source code
 gulp.task('lint-src', lintSrc)
@@ -113,10 +134,21 @@ gulp.task('lint', ['lint-src', 'lint-test', 'lint-gulpfile'])
 gulp.task('build', ['lint', 'clean'], build)
 
 // Lint and run our tests
-gulp.task('test', ['lint'], test)
+gulp.task('test', ['lint', 'set-env-test'], test)
+
+// Lint and run our tests
+gulp.task('integrationtest', ['lint', 'set-env-integrationtest'], integrationtest)
 
 // Run the headless unit tests as you make changes.
 gulp.task('watch', watch)
 
+// runs the integration tests as you make changes.
+gulp.task('watch-integration', watch_integrationtests)
+
 // An alias of test
 gulp.task('default', ['test'])
+
+// set environments
+gulp.task('set-env-development', set_env('development'))
+gulp.task('set-env-test', set_env('unittest'))
+gulp.task('set-env-integrationtest', set_env('integrationtest'))

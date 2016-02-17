@@ -1,5 +1,4 @@
-describe('IMPORTER', () => {    
-
+describe('importer', () => {    
 	it('should start with options', () => {
 		// arrange
 		var generalConfiguration = require('../../config')
@@ -20,8 +19,4 @@ describe('IMPORTER', () => {
 
 		expect(startImporterStub).to.have.been.calledWith(databaseConfigurationMock, importerConfigurationMock)		
 	})
-
-
-	require('./start-importer').default()
-	require('../configuration/__tests__/').default()
 })  

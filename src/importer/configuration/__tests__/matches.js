@@ -1,24 +1,26 @@
 import sut_matches from '../matches'
 
-export default function tests() {
-	describe('matches', () => {
-		it ('should not be null', () => {
-	  		expect(sut_matches).to.not.be.empty
-	  	})
+describe('importer', () => {  
+	describe('configuration', () => {
+		describe('matches', () => {
+			it ('should not be null', () => {
+		  		expect(sut_matches).to.not.be.empty
+		  	})
 
-	    it('should have one value', () => {    
-	      expect(Object.keys(sut_matches).length).to.equal(1)
-	    })
+		    it('should have one value', () => {    
+		      expect(Object.keys(sut_matches).length).to.equal(1)
+		    })
 
-	    it('should have correct value for the matches configuration', () => {        
-	    	var matches = sut_matches['matches']
-	    	expect(matches).to.not.be.empty
-	    	expect(matches.schema).to.deep.equal(expectedSchema)
-	    	expect(matches.path).to.equal('(atp|wta)_matches_\\d{4}.csv')
-	    	expect(matches.onSave).to.not.be.empty
-	    })    
+		    it('should have correct value for the matches configuration', () => {        
+		    	var matches = sut_matches['matches']
+		    	expect(matches).to.not.be.empty
+		    	expect(matches.schema).to.deep.equal(expectedSchema)
+		    	expect(matches.path).to.equal('(atp|wta)_matches_\\d{4}.csv')
+		    	expect(matches.onSave).to.not.be.empty
+		    })    
+		})
 	})
-}
+})
 
 const expectedSchema = [
 	'tourney_id',

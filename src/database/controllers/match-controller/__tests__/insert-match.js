@@ -1,7 +1,9 @@
 import sut_insertMatch from '../insert-match'
 import MatchModel from '../../../../database/models/match-model'
 
-export default function tests() {
+describe('database', () => {
+  describe('controllers', () => {
+    describe('match controller', () => {
       describe('insert match', () => {
       	it('should not be empty', () => {                          
       		expect(sut_insertMatch).to.not.be.empty  				
@@ -45,7 +47,9 @@ export default function tests() {
       		}).catch(done)          
       	})               
       })	 
-}
+    })
+  })   
+})   
 
 function createJsonMatch(){
   return {

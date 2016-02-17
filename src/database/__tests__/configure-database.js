@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 var configureDatabase = require('../configure-database')
 var sut_configureDatabase = configureDatabase.default
 
-export default function tests() {
+describe('database', () => {    	
 	describe('configure database', () => {
 		it('should return a promise and connect when given a proper connectionstring', () => {                          
 			// arrange
@@ -47,4 +47,4 @@ export default function tests() {
 			})
 		})	
 	})	
-}
+})

@@ -19,7 +19,7 @@ export default function configureDatabase(options) {
 				reject(error)
 			}) 
 			db.once('open', () => {								
-				resolve()
+				resolve(db)
 			})
 		}
 		catch(error) {

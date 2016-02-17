@@ -1,7 +1,9 @@
-export default function tests() {
-	describe('TODO', () => {
-		it('TODO', () => {
-
-		})
-	})	
-}
+describe('api', () => {
+	describe ('controllers', () => {
+		describe ('user controller', () => {
+			it('TODO', () => {
+				
+			})
+		})		
+	})		
+})

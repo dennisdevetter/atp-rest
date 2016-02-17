@@ -2,22 +2,24 @@ import TaskModel from '../../../database/models/task-model'
 var finishTask = require('../finish-task')	
 var sut_finishTask = finishTask.default
 
-export default function tests() {
-	describe('finish task', () => {
-		it('should throw error if the task model is null', () => {
-			var taskModel = null
-			expect(finishTask.default.bind(finishTask, taskModel)).to.throw('taskModel cannot be null')
-		})
+describe('utils', () => {  				
+	describe('task runner', () => {
+		describe('finish task', () => {
+			it('should throw error if the task model is null', () => {
+				var taskModel = null
+				expect(finishTask.default.bind(finishTask, taskModel)).to.throw('taskModel cannot be null')
+			})
 
-		it('should save the task model without error and return the task model ', (done) => {
-			finishTaskAndSave(null, done)
-		})
+			it('should save the task model without error and return the task model ', (done) => {
+				finishTaskAndSave(null, done)
+			})
 
-		it('should save the task model with error and return the task model ', (done) => {
-			finishTaskAndSave('an error occured', done)
+			it('should save the task model with error and return the task model ', (done) => {
+				finishTaskAndSave('an error occured', done)
+			})
 		})
 	})
-}
+})
 
 function finishTaskAndSave(error, done) {
 	// arrange			

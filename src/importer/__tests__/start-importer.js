@@ -1,7 +1,7 @@
 var startImporter = require('../start-importer')
 var sut_startImporter = startImporter.default
 
-export default function tests() {
+describe('importer', () => {  
 	describe('start importer', () => {
 		it('should throw an error when the database configuration is null', () => {                              	    
 		    var databaseConfiguration = null
@@ -40,4 +40,4 @@ export default function tests() {
 			}).catch(done)
 		})
 	})
-}
+})

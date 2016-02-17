@@ -8,7 +8,9 @@
     "test": "gulp",
     "lint": "gulp lint",
     "watch": "gulp watch",
+    "watch-integration": "gulp watch-integration",
     "build": "gulp build",
+    "integrationtest": "gulp integrationtest",
     "import": "babel-node ./src/importer"
   },
   "repository": {
@@ -46,6 +48,7 @@
     "glob": "^6.0.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
+    "gulp-env": "^0.4.0",
     "gulp-eslint": "^1.1.1",
     "gulp-filter": "^3.0.0",
     "gulp-istanbul": "^0.10.3",

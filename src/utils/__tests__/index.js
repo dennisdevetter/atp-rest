@@ -1,7 +1,6 @@
 import sut_utils from '../index'
 
-describe('UTILS', () => {
-
+describe('utils', () => {  	
 	it('should not be empty', () => {
 		expect(sut_utils).to.not.be.empty
 	})
@@ -10,12 +9,4 @@ describe('UTILS', () => {
 		var keys = ['taskRunner', 'dataImporter', 'csvConverter', 'fileHelper', 'logger']
 		expect(sut_utils).to.have.all.keys(keys)
 	})	
-	
-	require('./argument-validation').default()
-	require('./logger').default()
-	require('../task-runner/__tests__').default()
-	require('../data-importer/__tests__').default()
-	require('../file-helper/__tests__').default()
-	require('../cache-helper/__tests__').default()
-	require('../csv-converter/__tests__').default()
 })

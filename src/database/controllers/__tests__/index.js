@@ -1,6 +1,6 @@
 import sut_controllers from '../index'
 
-export default function tests() {
+describe('database', () => {
 	describe('controllers', () => {
 		it('should have correct value', () => {                          
 			expect(sut_controllers).to.not.be.empty  		
@@ -12,12 +12,7 @@ export default function tests() {
 				'matchController', 
 				'playerController'
 			])		
-		})
-
-		require('../match-controller/__tests__').default()
-		require('../task-controller/__tests__').default()
-		require('../ranking-controller/__tests__').default()
-		require('../player-controller/__tests__').default()
+		}) 			
 	})
-}
+})
 
