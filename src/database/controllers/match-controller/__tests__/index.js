@@ -9,7 +9,7 @@ describe('database', () => {
 
 			 it('should have all the capabilities', () => {
 			 	expect(Object.keys(sut_controller).length).to.equal(2)		
-				expect(sut_controller).to.have.all.keys(['saveMatch', 'insertMatch'])
+				expect(sut_controller).to.have.all.keys(['saveMatch', 'getMatch'])
 			 })
 		})
 	})

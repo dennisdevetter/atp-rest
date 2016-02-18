@@ -70,7 +70,7 @@ function build() {
 }
 
 function _mocha(testFiles) {
-  return gulp.src(['test/setup/node.js', testFiles], {read: false})
+  return gulp.src(['test/setup/node.js', ...testFiles], {read: false})
     .pipe(babel())
     .pipe($.mocha({
       reporter: 'spec',
@@ -80,11 +80,11 @@ function _mocha(testFiles) {
 }
 
 function test() {
-  return _mocha('src/**/__tests__/*.js')
+  return _mocha(['src/**/__tests__/*.js', '!src/**/__tests__/*.integration.js'])
 }
 
 function integrationtest() {
- return _mocha('src/**/__itests__/*.js') 
+ return _mocha(['src/**/__tests__/*.integration.js']) 
 }
 
 function set_env(stage) {
