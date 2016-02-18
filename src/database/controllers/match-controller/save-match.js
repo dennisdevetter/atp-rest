@@ -1,11 +1,14 @@
-import match from './match-utils'
+import utils from './match-utils'
 
 export default function saveMatch(json) {
 	return new Promise((resolve, reject) => {				
 
-		match.get(json).then(match.save)
-							     .then(match.toJson)
-							     .then(resolve)
-							     .catch(reject)
+		var match = utils.createBuilder()
+		
+		match.get(json)
+				 .save()
+				 .toJson()
+				 .then(resolve)
+				 .catch(reject)
 	})
 }

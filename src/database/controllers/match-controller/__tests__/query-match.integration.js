@@ -17,7 +17,7 @@ describe('database', () => {
 					var filter = { match: 100 }					
 					var promise = sut_queryMatch(filter)
 
-					promise.then((result) => {														
+					promise.then((result) => {					
 						expect(result).to.be.ok														
 						expect(result.length).to.equal(10)
 						done()

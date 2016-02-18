@@ -1,11 +1,13 @@
-import match from './match-utils'
+import utils from './match-utils'
 
 export default function getMatch(json) {
 	return new Promise((resolve, reject) => {				
+		
+		var match = utils.createBuilder()
 
-		return match.get(json)
-							  .then(match.toJson)
-							  .then(resolve)
-							  .catch(reject)
+		match.get(json)
+				 .toJson()
+				 .then(resolve)
+				 .catch(reject)
 	})
 }

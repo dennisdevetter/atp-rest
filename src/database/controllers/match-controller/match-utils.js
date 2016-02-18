@@ -1,87 +1,90 @@
 import MatchModel from '../../models/match-model'
+import ItemBuilder from '../../utils/item-builder'
 import { validateRequiredArgument } from '../../../utils/argument-validation'
 
-export function get(json) {
-	validateRequiredArgument({ json })
-	
-	return new Promise((resolve, reject) => {
-		function resolveInstance(model) {		
-			var value = Object.assign({}, { model, json })
-			resolve(value)
-		}
+function get(json) {
+	validateRequiredArgument({ json })			
 
-		if (json.id) {			
-			MatchModel.findOne({_id : json.id}).then(resolveInstance).catch(reject)
-			return
-		} 
+	return () => {		
+		return new Promise((resolve, reject) => {				
+			function resolveInstance(model) {		
+				var value = Object.assign({}, { model, json })
+				resolve(value)
+			}
 
-		if (json.tourneyId && json.match) {						
-			var filter = { tourneyId: json.tourneyId, match: json.match }
-			MatchModel.findOne(filter).then(resolveInstance).catch(reject)
-			return
-		}
+			if (json.id) {			
+				MatchModel.findOne({_id : json.id}).then(resolveInstance).catch(reject)
+				return
+			} 
 
-		resolve(null)
-	})	
-}
+			if (json.tourneyId && json.match) {						
+				var filter = { tourneyId: json.tourneyId, match: json.match }
+				MatchModel.findOne(filter).then(resolveInstance).catch(reject)
+				return
+			}
 
-export function query(json) {
-	validateRequiredArgument({ json })
-	
-	return new Promise((resolve, reject) => {
-		function resolveInstances(models) {					
-			var instances = []
-			if (models && models.length) {
-				models.forEach((item) => instances.push(item))
-			}												
-			resolve({ list: instances})
-		}
-
-		MatchModel.find(json).then(resolveInstances).catch(reject)
-	})	
-}
-
-export function save(options) {
-	var { model, json } = options || {}
-
-	if (!model) {
-		model = createModel(json)
+			resolve(null)
+		})	
 	}
-	
-	return new Promise((resolve, reject) => {
-
-		function resolveInstance(model) {		
-			var value = Object.assign({}, { model, json })
-			resolve(value)
-		}
-			model.save()
-				   .then(resolveInstance)
-				   .catch(reject)
-	})
 }
 
-export function createModel(json) {
-	validateRequiredArgument({ json })	
-	 return MatchModel.create(json)
+function query(json) {
+	validateRequiredArgument({ json })
+
+	return () => {		
+		return new Promise((resolve, reject) => {		
+			function resolveInstances(models) {									
+				var instances = []
+				if (models && models.length) {
+					models.forEach((item) => instances.push(item))
+				}												
+				resolve({ list: instances})
+			}
+
+			MatchModel.find(json).then(resolveInstances).catch(reject)
+		})	
+	}
 }
 
-export function toJson(options) {	
-	var { model, json, list } = options || {}
+function save() {
+	return (options) => {
+		return new Promise((resolve, reject) => {
+				var { model, json } = options || {}
 
-	return new Promise((resolve, reject) => {
-		if (list) {
-			var values = []
-			list.length && list.forEach((item) => {
-					var value = assignNewJsonValue(item)
-					values.push(value)
+				if (!model) {
+						model = createModel(json)
+				}
+
+				function resolveInstance() {												
+					var value = Object.assign({}, { model, json })					
+					resolve(value)
+				}
+				
+				model.save()
+						   .then(() => resolveInstance())
+						   .catch(reject)
 			})
-			resolve(values)
-		}
-		else {
-			var value = assignNewJsonValue(model, json)
-			resolve(value)			
-		}
-	})
+	}
+}
+
+function toJson() {
+	return (options) => {		
+ 		return new Promise((resolve, reject) => {	 		
+			var { model, json, list } = options || {}
+			if (list) {
+				var values = []
+				list.length && list.forEach((item) => {
+						var value = assignNewJsonValue(item)
+						values.push(value)
+				})
+				resolve(values)
+			}
+			else {
+				var value = assignNewJsonValue(model, json)
+				resolve(value)			
+			}
+		})
+	}
 }
 
 function assignNewJsonValue(model, json = {}) {
@@ -89,9 +92,15 @@ function assignNewJsonValue(model, json = {}) {
 	return value
 }
 
+function createModel(json) {
+	validateRequiredArgument({ json })	
+	return MatchModel.create(json)
+}
+
+function createBuilder() {
+	return new ItemBuilder({ get, query, save, toJson })
+}
+
 export default {
-	get,
-	query,
-	save,	
-	toJson
+	createBuilder
 }
