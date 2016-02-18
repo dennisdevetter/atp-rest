@@ -1,8 +1,9 @@
+import itemUtils from './item-utils'
 
 class ItemBuilder {
 
-	constructor(methods) {		
-		this.methods = methods
+	constructor(options) {				
+		this.methods = itemUtils(options)
 		this.builderList = []		
 	}
 
@@ -44,8 +45,8 @@ class ItemBuilder {
 	}
 }
 
-ItemBuilder.create = function(methods) {
-	return new ItemBuilder(methods)
+ItemBuilder.create = function(options) {
+	return new ItemBuilder(options)
 }
 
 export default ItemBuilder
