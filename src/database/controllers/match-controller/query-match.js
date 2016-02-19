@@ -1,9 +1,9 @@
-import utils from './match-utils'
+import createFluentMatchPromise from '../../middleware/match'
 
 export default function queryMatch(filter) {
 	return new Promise((resolve, reject) => {				
 
-		var match = utils.createBuilder()
+		var match = createFluentMatchPromise()
 
 		match.query(filter)
 				 .toJson()
